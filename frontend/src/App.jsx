@@ -1,12 +1,14 @@
-import React from 'react'
+import AppRoutes from "./routes/AppRoutes";
+import { Toaster } from "react-hot-toast";
 
-function App() {
+const App = () => {
   return (
-    <h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
+    <>
+      <Toaster position="top-right" reverseOrder={false} />
 
-  )
-}
+      <AppRoutes />
+    </>
+  );
+};
 
-export default App
+export default App;

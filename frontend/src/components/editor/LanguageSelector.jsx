@@ -1,9 +1,54 @@
-import React from 'react'
+import {
+  useEditorStore,
+} from "../../store/editorStore";
 
-function LanguageSelector() {
+const languages = [
+  "javascript",
+  "python",
+  "java",
+  "cpp",
+];
+
+const LanguageSelector = () => {
+
+  const {
+    language,
+    setLanguage,
+  } = useEditorStore();
+
   return (
-    <div>LanguageSelector</div>
-  )
-}
+    <select
+      value={language}
+      onChange={(e)=>
+        setLanguage(e.target.value)
+      }
+      className="
+        px-4
+        py-2
+        rounded-xl
+        bg-zinc-900
+        border
+        border-zinc-800
+        text-white
+        outline-none
+        cursor-pointer
+      "
+    >
 
-export default LanguageSelector
+      {
+        languages.map((lang) => (
+
+          <option
+            key={lang}
+            value={lang}
+          >
+            {lang}
+          </option>
+        ))
+      }
+
+    </select>
+  );
+};
+
+export default LanguageSelector;
