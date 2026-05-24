@@ -4,31 +4,56 @@ import { useNavigate } from "react-router-dom";
 
 import { useRoomStore } from "../../store/roomStore";
 
+import { v4 as uuidv4 } from "uuid";
+
 const JoinRoomCard = () => {
+
   const navigate = useNavigate();
 
-  const { createRoom, joinRoom, isCreatingRoom, isJoiningRoom } =
-    useRoomStore();
+  const {
+    setRoomName,
+  } = useRoomStore();
 
-  const [roomName, setRoomName] = useState("");
 
-  const [roomId, setRoomId] = useState("");
+  const [roomName, setRoomNameInput] =
+    useState("");
+
+  const [roomId, setRoomId] =
+    useState("");
+
 
   // ================= CREATE ROOM =================
 
-  const handleCreateRoom = async () => {
-    if (!roomName.trim()) return;
+  const handleCreateRoom =
+    () => {
 
-    await createRoom({ roomName }, navigate);
-  };
+      if (!roomName.trim()) return;
+
+      const newRoomId =
+        uuidv4();
+
+      setRoomName(
+        roomName
+      );
+
+      navigate(
+        `/room/${newRoomId}`
+      );
+    };
+
 
   // ================= JOIN ROOM =================
 
-  const handleJoinRoom = async () => {
-    if (!roomId.trim()) return;
+  const handleJoinRoom =
+    () => {
 
-    await joinRoom(roomId, navigate);
-  };
+      if (!roomId.trim()) return;
+
+      navigate(
+        `/room/${roomId}`
+      );
+    };
+
 
   return (
     <div
@@ -38,6 +63,7 @@ const JoinRoomCard = () => {
         gap-8
       "
     >
+
       {/* CREATE ROOM */}
       <div
         className="
@@ -49,7 +75,9 @@ const JoinRoomCard = () => {
           space-y-5
         "
       >
+
         <div>
+
           <h2
             className="
               text-2xl
@@ -61,14 +89,22 @@ const JoinRoomCard = () => {
             Create Room
           </h2>
 
-          <p className="text-zinc-400">Start coding collaboratively</p>
+          <p className="text-zinc-400">
+            Start coding collaboratively
+          </p>
+
         </div>
+
 
         <input
           type="text"
           placeholder="Enter room name"
           value={roomName}
-          onChange={(e) => setRoomName(e.target.value)}
+          onChange={(e) =>
+            setRoomNameInput(
+              e.target.value
+            )
+          }
           className="
             w-full
             px-4
@@ -84,9 +120,9 @@ const JoinRoomCard = () => {
           "
         />
 
+
         <button
           onClick={handleCreateRoom}
-          disabled={isCreatingRoom}
           className="
             w-full
             py-3
@@ -96,13 +132,16 @@ const JoinRoomCard = () => {
             transition-all
             text-white
             font-semibold
-            disabled:opacity-50
             cursor-pointer
           "
         >
-          {isCreatingRoom ? "Creating..." : "Create Room"}
+
+          Create Room
+
         </button>
+
       </div>
+
 
       {/* JOIN ROOM */}
       <div
@@ -115,7 +154,9 @@ const JoinRoomCard = () => {
           space-y-5
         "
       >
+
         <div>
+
           <h2
             className="
               text-2xl
@@ -127,14 +168,22 @@ const JoinRoomCard = () => {
             Join Room
           </h2>
 
-          <p className="text-zinc-400">Enter existing room ID</p>
+          <p className="text-zinc-400">
+            Enter existing room ID
+          </p>
+
         </div>
+
 
         <input
           type="text"
           placeholder="Enter room ID"
           value={roomId}
-          onChange={(e) => setRoomId(e.target.value)}
+          onChange={(e) =>
+            setRoomId(
+              e.target.value
+            )
+          }
           className="
             w-full
             px-4
@@ -150,9 +199,9 @@ const JoinRoomCard = () => {
           "
         />
 
+
         <button
           onClick={handleJoinRoom}
-          disabled={isJoiningRoom}
           className="
             w-full
             py-3
@@ -162,13 +211,16 @@ const JoinRoomCard = () => {
             transition-all
             text-white
             font-semibold
-            disabled:opacity-50
             cursor-pointer
           "
         >
-          {isJoiningRoom ? "Joining..." : "Join Room"}
+
+          Join Room
+
         </button>
+
       </div>
+
     </div>
   );
 };

@@ -5,7 +5,6 @@ import { connectDB } from "./config/db.js";
 import { ENV } from "./config/env.js";
 import axios from "axios"
 import authRoutes from "./routes/auth.route.js";
-import roomRoutes from "./routes/room.route.js";
 import { app, server } from "./socket/socket.js";
 
 
@@ -41,7 +40,6 @@ app.use(cookieParser());
 
 //Routes
 app.use("/api/auth", authRoutes);
-app.use("/api/rooms", roomRoutes);
 
 connectDB()
     .then(()=>{

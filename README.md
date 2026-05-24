@@ -69,3 +69,20 @@ src/
 ├── App.jsx
 ├── main.jsx
 └── index.css
+
+
+EACH ROOM 😎
+{
+  roomId,
+  roomName,
+
+  users: [],
+
+  code: "",
+
+  language: "javascript",
+
+  theme: "vs-dark",
+
+  chats: [],
+}

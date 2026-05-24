@@ -1,8 +1,9 @@
 import { Server } from "socket.io";
+
 import http from "http";
+
 import express from "express";
 
-import { ENV } from "../config/env.js";
 import { socketAuthMiddleware } from "../middlewares/socket.auth.middleware.js";
 
 export const app = express();
@@ -12,6 +13,7 @@ export const server = http.createServer(app);
 export const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
+
     credentials: true,
   },
 });
@@ -25,8 +27,9 @@ io.use(socketAuthMiddleware);
 // userId -> socketId
 const userSocketMap = new Map();
 
-// roomId -> active users
-const roomUsersMap = new Map();
+// ================= ROOMS =================
+
+const rooms = new Map();
 
 // helper function
 export const getReceiverSocketId = (userId) => {
@@ -36,65 +39,137 @@ export const getReceiverSocketId = (userId) => {
 // ================= SOCKET CONNECTION =================
 
 io.on("connection", (socket) => {
-  console.log(`User Connected: ${socket.user.username}`);
+  console.log(
+    `User Connected:
+       ${socket.user.username}`,
+  );
 
   // store online user
   userSocketMap.set(socket.userId, socket.id);
 
   // ================= JOIN ROOM =================
 
-  socket.on("join-room", ({ roomId }) => {
+  socket.on("join-room", ({ roomId, roomName }) => {
     socket.join(roomId);
 
-    // create room if not exists
-    if (!roomUsersMap.has(roomId)) {
-      roomUsersMap.set(roomId, []);
-    }
+    // create room
+    if (!rooms.has(roomId)) {
+      rooms.set(roomId, {
+        roomId,
 
-    const users = roomUsersMap.get(roomId);
+        roomName: roomName || "CodeSync Room",
 
-    // avoid duplicate users
-    const alreadyExists = users.some((u) => u.userId === socket.userId);
+        users: [],
 
-    if (!alreadyExists) {
-      users.push({
-        userId: socket.userId,
-        username: socket.user.username,
-        socketId: socket.id,
+        code: `console.log("Hello World");`,
+
+        language: "javascript",
+
+        theme: "vs-dark",
+
+        chats: [],
       });
     }
 
+    const room = rooms.get(roomId);
+
+    // remove old socket
+    // of same user
+    room.users = room.users.filter((u) => u.userId !== socket.userId);
+
+    // add fresh user
+    room.users.push({
+      userId: socket.userId,
+
+      username: socket.user.username,
+
+      socketId: socket.id,
+    });
+
+    // send latest room state
+    socket.emit("room-state", {
+      ...room,
+
+      code: room.code ?? "",
+    });
+
     // emit active users
-    io.to(roomId).emit("active-users", users);
+    io.to(roomId).emit("active-users", room.users);
 
     console.log(
       `${socket.user.username}
-       joined room ${roomId}`,
+           joined room ${roomId}`,
     );
   });
 
   // ================= CODE CHANGE =================
 
   socket.on("code-change", ({ roomId, code }) => {
+    const room = rooms.get(roomId);
+
+    if (!room) return;
+
+    // save latest code
+    room.code = code;
+
+    // sync code
     socket.to(roomId).emit("receive-code", code);
   });
 
   // ================= LANGUAGE CHANGE =================
 
-  socket.on("language-change", ({ roomId, language }) => {
-    socket.to(roomId).emit("receive-language", language);
+  socket.on("language-change", ({ roomId, language, code }) => {
+    const room = rooms.get(roomId);
+
+    if (!room) return;
+
+    // save latest language
+    room.language = language;
+
+    // IMPORTANT
+    // save latest snippet/code too
+    room.code = code;
+
+    io.to(roomId).emit("receive-language", {
+      language,
+      code,
+    });
+  });
+
+  // ================= THEME CHANGE =================
+
+  socket.on("theme-change", ({ roomId, theme }) => {
+    const room = rooms.get(roomId);
+
+    if (!room) return;
+
+    // save latest theme
+    room.theme = theme;
+
+    // sync theme
+    io.to(roomId).emit("receive-theme", theme);
   });
 
   // ================= CHAT =================
 
   socket.on("send-message", ({ roomId, message, sender }) => {
-    console.log("MESSAGE EVENT HIT");
-    io.to(roomId).emit("receive-message", {
+    const room = rooms.get(roomId);
+
+    if (!room) return;
+
+    const newMessage = {
       sender,
+
       message,
 
       timestamp: new Date(),
-    });
+    };
+
+    // save chats
+    room.chats.push(newMessage);
+
+    // sync chats
+    io.to(roomId).emit("receive-message", newMessage);
   });
 
   // ================= TYPING =================
@@ -103,20 +178,61 @@ io.on("connection", (socket) => {
     socket.to(roomId).emit("user-typing", username);
   });
 
+  // ================= LEAVE ROOM =================
+
+  socket.on("leave-room", ({ roomId }) => {
+    socket.leave(roomId);
+
+    const room = rooms.get(roomId);
+
+    if (!room) return;
+
+    room.users = room.users.filter((u) => u.socketId !== socket.id);
+
+    io.to(roomId).emit("active-users", room.users);
+
+    console.log(
+      `${socket.user.username}
+       left room ${roomId}`,
+    );
+
+    // delete empty room
+    if (room.users.length === 0) {
+      rooms.delete(roomId);
+
+      console.log(
+        `Deleted Room:
+         ${roomId}`,
+      );
+    }
+  });
+
   // ================= DISCONNECT =================
 
   socket.on("disconnect", () => {
-    console.log(`${socket.user.username} disconnected`);
+    console.log(
+      `${socket.user.username}
+           disconnected`,
+    );
 
     userSocketMap.delete(socket.userId);
 
-    // remove from all rooms
-    for (const [roomId, users] of roomUsersMap.entries()) {
-      const filteredUsers = users.filter((u) => u.socketId !== socket.id);
+    // remove user from rooms
+    for (const [roomId, room] of rooms.entries()) {
+      room.users = room.users.filter((u) => u.socketId !== socket.id);
 
-      roomUsersMap.set(roomId, filteredUsers);
+      // emit updated users
+      io.to(roomId).emit("active-users", room.users);
 
-      io.to(roomId).emit("active-users", filteredUsers);
+      // delete empty room
+      if (room.users.length === 0) {
+        console.log(
+          `Deleting Room:
+               ${roomId}`,
+        );
+
+        rooms.delete(roomId);
+      }
     }
   });
 });

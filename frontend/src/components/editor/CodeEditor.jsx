@@ -22,9 +22,12 @@ import { useParams } from "react-router-dom";
 
 import { useEffect } from "react";
 
+import { useRoomStore } from "../../store/roomStore";
+
 const CodeEditor = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
+  const { roomName } = useRoomStore();
 
   useEffect(() => {
     socket.on("receive-code", (incomingCode) => {
@@ -40,7 +43,14 @@ const CodeEditor = () => {
 
   // ================= LEAVE ROOM =================
 
-  const handleLeaveRoom = () => {
+  const handleLeaveRoom =
+  () => {
+
+    socket.emit(
+      "leave-room",
+      { roomId }
+    );
+
     navigate("/");
   };
 
@@ -82,7 +92,7 @@ const CodeEditor = () => {
               text-white
             "
           >
-            CodeVerse Room
+            {roomName}
           </h2>
 
           {/* LANGUAGE */}

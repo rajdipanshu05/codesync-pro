@@ -1,4 +1,4 @@
-import { Copy } from "lucide-react";
+import { Copy, Code2 } from "lucide-react";
 
 import { useParams } from "react-router-dom";
 
@@ -24,16 +24,52 @@ const RoomSidebar = () => {
       "
     >
       {/* LOGO */}
-      <div className="mb-8">
-        <h1
+      {/* LOGO */}
+      <div
+        className="
+    mb-8
+    flex
+    items-center
+    gap-3
+  "
+      >
+        <div
           className="
-            text-3xl
-            font-bold
-            tracking-tight
-          "
+      p-2
+      rounded-xl
+      bg-blue-500/10
+      border
+      border-blue-500/20
+    "
         >
-          CodeSync
-        </h1>
+          <Code2
+            className="
+        text-blue-500
+      "
+          />
+        </div>
+
+        <div>
+          <h1
+            className="
+        text-2xl
+        font-bold
+        text-white
+        tracking-tight
+      "
+          >
+            CodeSync
+          </h1>
+
+          {/* <p
+            className="
+        text-xs
+        text-zinc-500
+      "
+          >
+            A Collaborative Coding Platform
+          </p> */}
+        </div>
       </div>
 
       {/* ROOM INFO */}

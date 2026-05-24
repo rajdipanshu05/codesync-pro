@@ -7,7 +7,7 @@ const ActiveUsers = () => {
     <div className="space-y-3">
       {activeUsers.map((user) => (
         <div
-          key={user.id}
+          key={user.socketId}
           className="
               flex
               items-center

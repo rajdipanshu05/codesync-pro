@@ -1,34 +1,63 @@
 import { create } from "zustand";
 
-import { LANGUAGE_SNIPPETS } from "../utils/constants";
+import {
+  LANGUAGE_SNIPPETS,
+} from "../utils/constants";
 
-export const useEditorStore = create((set) => ({
-  language: "javascript",
+export const useEditorStore =
+  create((set) => ({
 
-  theme: "vs-dark",
+    language:
+      "javascript",
 
-  code: LANGUAGE_SNIPPETS.javascript,
+    theme:
+      "vs-dark",
 
-  // ================= SET LANGUAGE =================
+    code:
+      LANGUAGE_SNIPPETS
+        .javascript,
 
-  setLanguage: (language) =>
-    set({
-      language,
 
-      code: LANGUAGE_SNIPPETS[language],
-    }),
+    // ================= SET LANGUAGE =================
 
-  // ================= SET THEME =================
+    setLanguage:
+      (
+        language,
+        preserveCode = true
+      ) =>
 
-  setTheme: (theme) =>
-    set({
-      theme,
-    }),
+        set((state) => ({
 
-  // ================= SET CODE =================
+          language,
 
-  setCode: (code) =>
-    set({
-      code,
-    }),
+          code:
+            preserveCode
+              ? state.code
+              : LANGUAGE_SNIPPETS[
+                  language
+                ],
+        })),
+
+
+
+    // ================= SET THEME =================
+
+    setTheme:
+      (theme) =>
+
+        set({
+          theme,
+        }),
+
+
+
+    // ================= SET CODE =================
+
+    setCode:
+      (code) =>
+
+        set({
+          code,
+        }),
+
 }));

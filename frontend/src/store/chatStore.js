@@ -4,39 +4,33 @@ from "zustand";
 export const useChatStore =
   create((set) => ({
 
-    messages:
-      JSON.parse(
-        localStorage.getItem(
-          "chat-messages"
-        )
-      ) || [],
+    messages: [],
 
     typingUser: null,
 
 
+    // ================= SET ALL MESSAGES =================
+
+    setMessages:
+      (messages) =>
+
+        set({
+          messages,
+        }),
+
+
     // ================= ADD MESSAGE =================
 
-    addMessage: (message) =>
+    addMessage:
+      (message) =>
 
-      set((state) => {
+        set((state) => ({
 
-        const updatedMessages = [
-          ...state.messages,
-          message,
-        ];
-
-        localStorage.setItem(
-          "chat-messages",
-          JSON.stringify(
-            updatedMessages
-          )
-        );
-
-        return {
-          messages:
-            updatedMessages,
-        };
-      }),
+          messages: [
+            ...state.messages,
+            message,
+          ],
+        })),
 
 
     // ================= SET TYPING USER =================
@@ -45,21 +39,18 @@ export const useChatStore =
       (username) =>
 
         set({
-          typingUser: username,
+          typingUser:
+            username,
         }),
 
 
     // ================= CLEAR =================
 
-    clearMessages: () => {
+    clearMessages:
+      () =>
 
-      localStorage.removeItem(
-        "chat-messages"
-      );
-
-      set({
-        messages: [],
-      });
-    },
+        set({
+          messages: [],
+        }),
 
 }));

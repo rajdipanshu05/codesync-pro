@@ -1,62 +1,32 @@
-import { create } from "zustand";
+import { create }
+from "zustand";
 
-import toast from "react-hot-toast";
+export const useRoomStore =
+  create((set) => ({
 
-import { axiosInstance } from "../api/axios";
+    activeUsers: [],
 
-export const useRoomStore = create((set) => ({
-  isCreatingRoom: false,
+    roomName:
+      "CodeSync Room",
 
-  isJoiningRoom: false,
 
-  activeUsers: [],
+    // ================= ACTIVE USERS =================
 
-  setActiveUsers: (users) =>
-    set({
-      activeUsers: users,
-    }),
+    setActiveUsers:
+      (users) =>
 
-  // ================= CREATE ROOM =================
+        set({
+          activeUsers: users,
+        }),
 
-  createRoom: async (formData, navigate) => {
-    try {
-      set({
-        isCreatingRoom: true,
-      });
 
-      const response = await axiosInstance.post("/rooms/create", formData);
+    // ================= ROOM NAME =================
 
-      toast.success("Room created successfully");
+    setRoomName:
+      (roomName) =>
 
-      navigate(`/room/${response.data.room.roomId}`);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to create room");
-    } finally {
-      set({
-        isCreatingRoom: false,
-      });
-    }
-  },
+        set({
+          roomName,
+        }),
 
-  // ================= JOIN ROOM =================
-
-  joinRoom: async (roomId, navigate) => {
-    try {
-      set({
-        isJoiningRoom: true,
-      });
-
-      await axiosInstance.post("/rooms/join", { roomId });
-
-      toast.success("Joined room successfully");
-
-      navigate(`/room/${roomId}`);
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to join room");
-    } finally {
-      set({
-        isJoiningRoom: false,
-      });
-    }
-  },
 }));

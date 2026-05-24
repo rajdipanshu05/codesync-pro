@@ -18,27 +18,31 @@ import { useRoomStore } from "../store/roomStore";
 
 import { useChatStore } from "../store/chatStore";
 
+import { useEditorStore } from "../store/editorStore";
+
 const RoomPage = () => {
   useSocket();
 
   const { roomId } = useParams();
 
-  const { setActiveUsers } = useRoomStore();
+  const { setActiveUsers, roomName, setRoomName } = useRoomStore();
 
-  const { addMessage, setTypingUser } = useChatStore();
+  const { addMessage, setMessages, setTypingUser } = useChatStore();
+
+  const { setCode, setLanguage, setTheme } = useEditorStore();
 
   // ================= JOIN ROOM =================
 
   useEffect(() => {
     const handleConnect = () => {
-      console.log("SOCKET CONNECTED");
-
-      socket.emit("join-room", { roomId });
+      socket.emit("join-room", {
+        roomId,
+        roomName,
+      });
     };
 
     socket.on("connect", handleConnect);
 
-    // already connected case
     if (socket.connected) {
       handleConnect();
     }
@@ -47,6 +51,30 @@ const RoomPage = () => {
       socket.off("connect", handleConnect);
     };
   }, [roomId]);
+
+  // ================= ROOM STATE =================
+
+  useEffect(() => {
+    socket.on("room-state", (room) => {
+      setRoomName(room.roomName);
+
+      setTheme(room.theme);
+
+      // language first
+      setLanguage(room.language,true);
+
+      // then latest code
+      setCode(room.code || "");
+
+      setMessages(room.chats || []);
+
+      setActiveUsers(room.users || []);
+    });
+
+    return () => {
+      socket.off("room-state");
+    };
+  }, []);
 
   // ================= ACTIVE USERS =================
 
@@ -64,8 +92,6 @@ const RoomPage = () => {
 
   useEffect(() => {
     socket.on("receive-message", (message) => {
-      console.log("MESSAGE RECEIVED:", message);
-
       addMessage(message);
     });
 
