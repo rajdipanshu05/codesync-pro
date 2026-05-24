@@ -1,41 +1,77 @@
+import {
+  useEffect,
+  useRef,
+} from "react";
+
 import ChatMessage
 from "./ChatMessage";
 
-const dummyMessages = [
-  {
-    id: 1,
-    sender: "Dipanshu",
-    text: "Hello everyone 👋",
-  },
-  {
-    id: 2,
-    sender: "Alex",
-    text: "Let's start coding 🚀",
-  },
-];
+import {
+  useChatStore,
+} from "../../store/chatStore";
 
 const MessageList = () => {
 
+  const {
+    messages,
+  } = useChatStore();
+
+
+  // ================= AUTO SCROLL =================
+
+  const bottomRef =
+    useRef(null);
+
+
+  useEffect(() => {
+
+    bottomRef.current?.
+      scrollIntoView({
+        behavior: "smooth",
+      });
+
+  }, [messages]);
+
+
   return (
+
     <div
       className="
         flex-1
         overflow-y-auto
-        p-5
-        space-y-4
+        p-4
+        space-y-2
       "
     >
 
       {
-        dummyMessages.map(
-          (message) => (
+        messages.map(
+          (
+            message,
+            index
+          ) => {
 
-          <ChatMessage
-            key={message.id}
-            message={message}
-          />
-        ))
+            const prevMessage =
+              messages[index - 1];
+
+            const showSender =
+              prevMessage?.sender !==
+              message.sender;
+
+            return (
+
+              <ChatMessage
+                key={index}
+                message={message}
+                showSender={showSender}
+              />
+            );
+          }
+        )
       }
+
+      {/* AUTO SCROLL TARGET */}
+      <div ref={bottomRef} />
 
     </div>
   );

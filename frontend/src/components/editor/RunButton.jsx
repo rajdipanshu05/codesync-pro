@@ -1,7 +1,6 @@
 import { Play } from "lucide-react";
 
 const RunButton = () => {
-
   return (
     <button
       className="
@@ -19,11 +18,8 @@ const RunButton = () => {
         text-white
       "
     >
-
       <Play size={18} />
-
       Run Code
-
     </button>
   );
 };

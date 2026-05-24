@@ -1,10 +1,4 @@
-const RoomLayout = ({
-  sidebar,
-  navbar,
-  editor,
-  chat,
-}) => {
-
+const RoomLayout = ({ sidebar, editor, chat }) => {
   return (
     <div
       className="
@@ -15,7 +9,6 @@ const RoomLayout = ({
         overflow-hidden
       "
     >
-
       {/* SIDEBAR */}
       <aside
         className="
@@ -30,54 +23,37 @@ const RoomLayout = ({
         {sidebar}
       </aside>
 
-
       {/* MAIN */}
       <main
         className="
           flex-1
           flex
-          flex-col
+          overflow-hidden
         "
       >
-
-        {navbar}
-
-        <div
+        {/* EDITOR */}
+        <section
           className="
             flex-1
             flex
-            overflow-hidden
+            flex-col
           "
         >
+          {editor}
+        </section>
 
-          {/* EDITOR */}
-          <section
-            className="
-              flex-1
-              flex
-              flex-col
-            "
-          >
-            {editor}
-          </section>
-
-
-          {/* CHAT */}
-          <section
-            className="
-              w-[320px]
-              border-l
-              border-zinc-800
-              bg-zinc-900
-            "
-          >
-            {chat}
-          </section>
-
-        </div>
-
+        {/* CHAT */}
+        <section
+          className="
+            w-[280px]
+            border-l
+            border-zinc-800
+            bg-zinc-900
+          "
+        >
+          {chat}
+        </section>
       </main>
-
     </div>
   );
 };

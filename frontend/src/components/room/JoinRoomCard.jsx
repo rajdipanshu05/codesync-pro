@@ -1,56 +1,34 @@
 import { useState } from "react";
 
-import { useNavigate }
-from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import { useRoomStore }
-from "../../store/roomStore";
+import { useRoomStore } from "../../store/roomStore";
 
 const JoinRoomCard = () => {
-
   const navigate = useNavigate();
 
-  const {
-    createRoom,
-    joinRoom,
-    isCreatingRoom,
-    isJoiningRoom,
-  } = useRoomStore();
+  const { createRoom, joinRoom, isCreatingRoom, isJoiningRoom } =
+    useRoomStore();
 
-  const [roomName, setRoomName] =
-    useState("");
+  const [roomName, setRoomName] = useState("");
 
-  const [roomId, setRoomId] =
-    useState("");
-
+  const [roomId, setRoomId] = useState("");
 
   // ================= CREATE ROOM =================
 
-  const handleCreateRoom =
-    async () => {
+  const handleCreateRoom = async () => {
+    if (!roomName.trim()) return;
 
-      if (!roomName.trim()) return;
-
-      await createRoom(
-        { roomName },
-        navigate
-      );
-    };
-
+    await createRoom({ roomName }, navigate);
+  };
 
   // ================= JOIN ROOM =================
 
-  const handleJoinRoom =
-    async () => {
+  const handleJoinRoom = async () => {
+    if (!roomId.trim()) return;
 
-      if (!roomId.trim()) return;
-
-      await joinRoom(
-        roomId,
-        navigate
-      );
-    };
-
+    await joinRoom(roomId, navigate);
+  };
 
   return (
     <div
@@ -60,7 +38,6 @@ const JoinRoomCard = () => {
         gap-8
       "
     >
-
       {/* CREATE ROOM */}
       <div
         className="
@@ -72,9 +49,7 @@ const JoinRoomCard = () => {
           space-y-5
         "
       >
-
         <div>
-
           <h2
             className="
               text-2xl
@@ -86,20 +61,14 @@ const JoinRoomCard = () => {
             Create Room
           </h2>
 
-          <p className="text-zinc-400">
-            Start coding collaboratively
-          </p>
-
+          <p className="text-zinc-400">Start coding collaboratively</p>
         </div>
-
 
         <input
           type="text"
           placeholder="Enter room name"
           value={roomName}
-          onChange={(e)=>
-            setRoomName(e.target.value)
-          }
+          onChange={(e) => setRoomName(e.target.value)}
           className="
             w-full
             px-4
@@ -114,7 +83,6 @@ const JoinRoomCard = () => {
             focus:border-blue-500
           "
         />
-
 
         <button
           onClick={handleCreateRoom}
@@ -132,17 +100,9 @@ const JoinRoomCard = () => {
             cursor-pointer
           "
         >
-
-          {
-            isCreatingRoom
-              ? "Creating..."
-              : "Create Room"
-          }
-
+          {isCreatingRoom ? "Creating..." : "Create Room"}
         </button>
-
       </div>
-
 
       {/* JOIN ROOM */}
       <div
@@ -155,9 +115,7 @@ const JoinRoomCard = () => {
           space-y-5
         "
       >
-
         <div>
-
           <h2
             className="
               text-2xl
@@ -169,20 +127,14 @@ const JoinRoomCard = () => {
             Join Room
           </h2>
 
-          <p className="text-zinc-400">
-            Enter existing room ID
-          </p>
-
+          <p className="text-zinc-400">Enter existing room ID</p>
         </div>
-
 
         <input
           type="text"
           placeholder="Enter room ID"
           value={roomId}
-          onChange={(e)=>
-            setRoomId(e.target.value)
-          }
+          onChange={(e) => setRoomId(e.target.value)}
           className="
             w-full
             px-4
@@ -197,7 +149,6 @@ const JoinRoomCard = () => {
             focus:border-emerald-500
           "
         />
-
 
         <button
           onClick={handleJoinRoom}
@@ -215,17 +166,9 @@ const JoinRoomCard = () => {
             cursor-pointer
           "
         >
-
-          {
-            isJoiningRoom
-              ? "Joining..."
-              : "Join Room"
-          }
-
+          {isJoiningRoom ? "Joining..." : "Join Room"}
         </button>
-
       </div>
-
     </div>
   );
 };

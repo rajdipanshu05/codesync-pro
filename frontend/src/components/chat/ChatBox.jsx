@@ -1,11 +1,11 @@
-import MessageList
-from "./MessageList";
+import MessageList from "./MessageList";
 
-import MessageInput
-from "./MessageInput";
+import MessageInput from "./MessageInput";
+
+import { useChatStore } from "../../store/chatStore";
 
 const ChatBox = () => {
-
+  const { typingUser } = useChatStore();
   return (
     <div
       className="
@@ -14,7 +14,6 @@ const ChatBox = () => {
         flex-col
       "
     >
-
       {/* HEADER */}
       <div
         className="
@@ -26,21 +25,28 @@ const ChatBox = () => {
           items-center
         "
       >
-
-        <h2 className="font-semibold">
-          Room Chat
-        </h2>
-
+        <h2 className="font-semibold">Room Chat</h2>
       </div>
-
 
       {/* MESSAGES */}
       <MessageList />
 
+      {/* TYPING */}
+      {typingUser && (
+        <div
+          className="
+        px-4
+        pb-2
+        text-xs
+        text-zinc-400
+      "
+        >
+          {typingUser} is typing...
+        </div>
+      )}
 
       {/* INPUT */}
       <MessageInput />
-
     </div>
   );
 };

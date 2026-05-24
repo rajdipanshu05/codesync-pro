@@ -1,18 +1,20 @@
 import { useEffect } from "react";
 
-import { socket }
-from "../lib/socket";
+import { socket } from "../lib/socket";
 
 const useSocket = () => {
-
   useEffect(() => {
+    if (!socket.connected) {
+      socket.connect();
+    }
 
-    socket.connect();
+    socket.on("connect", () => {
+      console.log("SOCKET CONNECTED:", socket.id);
+    });
 
     return () => {
-      socket.disconnect();
+      socket.off("connect");
     };
-
   }, []);
 };
 

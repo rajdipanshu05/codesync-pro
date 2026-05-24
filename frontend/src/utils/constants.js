@@ -1,13 +1,9 @@
 export const LANGUAGE_SNIPPETS = {
+  javascript: `console.log("Welcome to CodeSync 🚀");`,
 
-  javascript:
-`console.log("Welcome to CodeSync 🚀");`,
+  python: `print("Welcome to CodeSync 🚀")`,
 
-  python:
-`print("Welcome to CodeSync 🚀")`,
-
-  java:
-`public class Main {
+  java: `public class Main {
 
     public static void main(String[] args) {
 
@@ -16,8 +12,7 @@ export const LANGUAGE_SNIPPETS = {
     }
 }`,
 
-  cpp:
-`#include <iostream>
+  cpp: `#include <iostream>
 using namespace std;
 
 int main() {

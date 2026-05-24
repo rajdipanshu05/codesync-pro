@@ -1,55 +1,48 @@
-import Editor
-from "@monaco-editor/react";
+import Editor from "@monaco-editor/react";
 
-import {
-  LogOut,
-} from "lucide-react";
+import { LogOut } from "lucide-react";
 
-import {
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-import {
-  useEditorStore,
-} from "../../store/editorStore";
+import { useEditorStore } from "../../store/editorStore";
 
-import LanguageSelector
-from "./LanguageSelector";
+import LanguageSelector from "./LanguageSelector";
 
-import ThemeSelector
-from "./ThemeSelector";
+import ThemeSelector from "./ThemeSelector";
 
-import RunButton
-from "./RunButton";
+import RunButton from "./RunButton";
 
-import InputBox
-from "./InputBox";
+import InputBox from "./InputBox";
 
-import OutputBox
-from "./OutputBox";
+import OutputBox from "./OutputBox";
+
+import { socket } from "../../lib/socket";
+
+import { useParams } from "react-router-dom";
+
+import { useEffect } from "react";
 
 const CodeEditor = () => {
+  const navigate = useNavigate();
+  const { roomId } = useParams();
 
-  const navigate =
-    useNavigate();
+  useEffect(() => {
+    socket.on("receive-code", (incomingCode) => {
+      setCode(incomingCode);
+    });
 
+    return () => {
+      socket.off("receive-code");
+    };
+  }, []);
 
-  const {
-    code,
-    setCode,
-    language,
-    theme,
-  } = useEditorStore();
-
+  const { code, setCode, language, theme } = useEditorStore();
 
   // ================= LEAVE ROOM =================
 
-  const handleLeaveRoom =
-    () => {
-
-      navigate("/");
-    };
-
+  const handleLeaveRoom = () => {
+    navigate("/");
+  };
 
   return (
     <div
@@ -60,7 +53,6 @@ const CodeEditor = () => {
         overflow-hidden
       "
     >
-
       {/* TOPBAR */}
       <div
         className="
@@ -74,7 +66,6 @@ const CodeEditor = () => {
           bg-zinc-950
         "
       >
-
         {/* LEFT */}
         <div
           className="
@@ -83,7 +74,6 @@ const CodeEditor = () => {
             gap-4
           "
         >
-
           {/* ROOM NAME */}
           <h2
             className="
@@ -100,9 +90,7 @@ const CodeEditor = () => {
 
           {/* THEME */}
           <ThemeSelector />
-
         </div>
-
 
         {/* RIGHT */}
         <div
@@ -112,10 +100,8 @@ const CodeEditor = () => {
             gap-4
           "
         >
-
           {/* RUN BUTTON */}
           <RunButton />
-
 
           {/* LEAVE BUTTON */}
           <button
@@ -136,17 +122,11 @@ const CodeEditor = () => {
               cursor-pointer
             "
           >
-
             <LogOut size={18} />
-
             Leave
-
           </button>
-
         </div>
-
       </div>
-
 
       {/* EDITOR */}
       <div
@@ -155,7 +135,6 @@ const CodeEditor = () => {
           p-5
         "
       >
-
         <div
           className="
             h-full
@@ -165,15 +144,21 @@ const CodeEditor = () => {
             border-zinc-800
           "
         >
-
           <Editor
             height="100%"
             language={language}
             theme={theme}
             value={code}
-            onChange={(value)=>
-              setCode(value || "")
-            }
+            onChange={(value) => {
+              const newCode = value || "";
+
+              setCode(newCode);
+
+              socket.emit("code-change", {
+                roomId,
+                code: newCode,
+              });
+            }}
             options={{
               minimap: {
                 enabled: false,
@@ -188,11 +173,8 @@ const CodeEditor = () => {
               },
             }}
           />
-
         </div>
-
       </div>
-
 
       {/* INPUT OUTPUT */}
       <div
@@ -206,13 +188,10 @@ const CodeEditor = () => {
           gap-5
         "
       >
-
         <InputBox />
 
         <OutputBox />
-
       </div>
-
     </div>
   );
 };

@@ -89,19 +89,19 @@ const LoginForm = () => {
             value={formData.email}
             onChange={handleChange}
             className="
-                        w-full
-                        px-4
-                        py-3
-                        rounded-xl
-                        bg-zinc-950
-                        border
-                        caret-white
-                        border-zinc-800
-                        outline-none
-                        text-white
-                        placeholder:text-zinc-500
-                        focus:border-blue-500
-                      "
+              w-full
+              px-4
+              py-3
+              rounded-xl
+              bg-zinc-950
+              border
+              caret-white
+              border-zinc-800
+              outline-none
+              text-white
+              placeholder:text-zinc-500
+              focus:border-blue-500
+            "
           />
 
           {errors.email && (

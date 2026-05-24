@@ -1,5 +1,4 @@
 const InputBox = () => {
-
   return (
     <div
       className="
@@ -11,7 +10,6 @@ const InputBox = () => {
         p-4
       "
     >
-
       <h3
         className="
           text-sm
@@ -35,7 +33,6 @@ const InputBox = () => {
           placeholder:text-zinc-500
         "
       />
-
     </div>
   );
 };

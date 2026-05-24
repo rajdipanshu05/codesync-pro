@@ -3,9 +3,7 @@ import { LogOut, Code2 } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 
 const Navbar = () => {
-
-  const { user, logout } =
-    useAuthStore();
+  const { user, logout } = useAuthStore();
 
   return (
     <nav
@@ -17,7 +15,6 @@ const Navbar = () => {
         backdrop-blur
       "
     >
-
       <div
         className="
           max-w-7xl
@@ -29,10 +26,8 @@ const Navbar = () => {
           justify-between
         "
       >
-
         {/* LEFT */}
         <div className="flex items-center gap-3">
-
           <div
             className="
               p-2
@@ -54,13 +49,10 @@ const Navbar = () => {
           >
             CodeSync
           </h1>
-
         </div>
-
 
         {/* RIGHT */}
         <div className="flex items-center gap-4">
-
           {/* USER */}
           <div
             className="
@@ -74,14 +66,8 @@ const Navbar = () => {
               text-white
             "
           >
-
-            {
-              user?.username?.[0]
-                ?.toUpperCase()
-            }
-
+            {user?.username?.[0]?.toUpperCase()}
           </div>
-
 
           {/* LOGOUT */}
           <button
@@ -102,17 +88,11 @@ const Navbar = () => {
               text-white
             "
           >
-
             <LogOut size={18} />
-
             Logout
-
           </button>
-
         </div>
-
       </div>
-
     </nav>
   );
 };

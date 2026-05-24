@@ -1,32 +1,19 @@
-import {
-  Copy,
-} from "lucide-react";
+import { Copy } from "lucide-react";
 
-import {
-  useParams,
-} from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-import ActiveUsers
-from "./ActiveUsers";
+import ActiveUsers from "./ActiveUsers";
 
 const RoomSidebar = () => {
-
-  const { roomId } =
-    useParams();
-
+  const { roomId } = useParams();
 
   // ================= COPY ROOM ID =================
 
-  const handleCopy =
-    async () => {
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(roomId);
 
-      await navigator
-        .clipboard
-        .writeText(roomId);
-
-      alert("Room ID copied");
-    };
-
+    alert("Room ID copied");
+  };
 
   return (
     <div
@@ -36,10 +23,8 @@ const RoomSidebar = () => {
         overflow-y-auto
       "
     >
-
       {/* LOGO */}
       <div className="mb-8">
-
         <h1
           className="
             text-3xl
@@ -49,9 +34,7 @@ const RoomSidebar = () => {
         >
           CodeSync
         </h1>
-
       </div>
-
 
       {/* ROOM INFO */}
       <div
@@ -64,7 +47,6 @@ const RoomSidebar = () => {
           mb-8
         "
       >
-
         <p
           className="
             text-zinc-400
@@ -86,7 +68,6 @@ const RoomSidebar = () => {
         >
           {roomId}
         </p>
-
 
         {/* COPY BUTTON */}
         <button
@@ -110,19 +91,13 @@ const RoomSidebar = () => {
             font-medium
           "
         >
-
           <Copy size={16} />
-
           Copy Room ID
-
         </button>
-
       </div>
-
 
       {/* ACTIVE USERS */}
       <div>
-
         <h2
           className="
             text-lg
@@ -134,9 +109,7 @@ const RoomSidebar = () => {
         </h2>
 
         <ActiveUsers />
-
       </div>
-
     </div>
   );
 };

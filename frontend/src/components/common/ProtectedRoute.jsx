@@ -1,23 +1,25 @@
-import { Navigate }
-from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
-import { useAuthStore }
-from "../../store/authStore";
+import { useAuthStore } from "../../store/authStore";
 
-const ProtectedRoute = ({
-  children,
-}) => {
+import Loader from "./Loader";
 
-  const {
-    isAuthenticated,
-  } = useAuthStore();
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, isCheckingAuth } = useAuthStore();
+
+  // ================= LOADING =================
+
+  if (isCheckingAuth) {
+    return <Loader />;
+  }
+
+  // ================= NOT AUTH =================
 
   if (!isAuthenticated) {
-
-    return (
-      <Navigate to="/login" />
-    );
+    return <Navigate to="/login" />;
   }
+
+  // ================= AUTHORIZED =================
 
   return children;
 };

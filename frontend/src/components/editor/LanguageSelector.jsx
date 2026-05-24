@@ -1,27 +1,40 @@
-import {
-  useEditorStore,
-} from "../../store/editorStore";
+import { useEditorStore } from "../../store/editorStore";
+import { socket } from "../../lib/socket";
 
-const languages = [
-  "javascript",
-  "python",
-  "java",
-  "cpp",
-];
+import { useParams } from "react-router-dom";
+
+import { useEffect } from "react";
+
+const languages = ["javascript", "python", "java", "cpp"];
 
 const LanguageSelector = () => {
+  const { roomId } = useParams();
 
-  const {
-    language,
-    setLanguage,
-  } = useEditorStore();
+  const { language, setLanguage } = useEditorStore();
+
+  useEffect(() => {
+    socket.on("receive-language", (incomingLanguage) => {
+      setLanguage(incomingLanguage);
+    });
+
+    return () => {
+      socket.off("receive-language");
+    };
+  }, []);
 
   return (
     <select
       value={language}
-      onChange={(e)=>
-        setLanguage(e.target.value)
-      }
+      onChange={(e) => {
+        const newLanguage = e.target.value;
+
+        setLanguage(newLanguage);
+
+        socket.emit("language-change", {
+          roomId,
+          language: newLanguage,
+        });
+      }}
       className="
         px-4
         py-2
@@ -34,19 +47,11 @@ const LanguageSelector = () => {
         cursor-pointer
       "
     >
-
-      {
-        languages.map((lang) => (
-
-          <option
-            key={lang}
-            value={lang}
-          >
-            {lang}
-          </option>
-        ))
-      }
-
+      {languages.map((lang) => (
+        <option key={lang} value={lang}>
+          {lang}
+        </option>
+      ))}
     </select>
   );
 };

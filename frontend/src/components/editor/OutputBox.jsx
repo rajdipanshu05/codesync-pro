@@ -1,5 +1,4 @@
 const OutputBox = () => {
-
   return (
     <div
       className="
@@ -12,7 +11,6 @@ const OutputBox = () => {
         overflow-y-auto
       "
     >
-
       <h3
         className="
           text-sm
@@ -33,7 +31,6 @@ const OutputBox = () => {
       >
         Output will appear here...
       </pre>
-
     </div>
   );
 };
