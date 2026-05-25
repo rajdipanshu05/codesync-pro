@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from 'axios'
 
-import { Play, Loader2 } from "lucide-react";
+import { Play, Loader2 } from 'lucide-react'
 
-import { useEditorStore } from "../../store/editorStore";
+import { useEditorStore } from '../../store/editorStore'
 
 const RunButton = () => {
   const {
@@ -18,54 +18,54 @@ const RunButton = () => {
 
     setIsRunning,
 
-    setExecutionInfo,
-  } = useEditorStore();
+    setExecutionInfo
+  } = useEditorStore()
 
   // ================= RUN CODE =================
 
   const handleRunCode = async () => {
     try {
-      setIsRunning(true);
+      setIsRunning(true)
 
-      setOutput("Running...");
+      setOutput('Running...')
 
       const response = await axios.post(
-        "http://localhost:8000/api/code/run",
+        'http://localhost:8000/api/code/run',
 
         {
           language,
 
           source_code: code,
 
-          stdin: input,
+          stdin: input
         },
 
         {
-          withCredentials: true,
-        },
-      );
+          withCredentials: true
+        }
+      )
 
-      const data = response.data;
+      const data = response.data
 
       // ================= SUCCESS =================
 
       if (data.stdout) {
-        setOutput(data.stdout);
+        setOutput(data.stdout)
       }
 
       // ================= RUNTIME ERROR =================
       else if (data.stderr) {
-        setOutput(data.stderr);
+        setOutput(data.stderr)
       }
 
       // ================= COMPILE ERROR =================
       else if (data.compile_output) {
-        setOutput(data.compile_output);
+        setOutput(data.compile_output)
       }
 
       // ================= OTHER =================
       else {
-        setOutput(data.status?.description || "Execution failed");
+        setOutput(data.status?.description || 'Execution failed')
       }
 
       // ================= EXECUTION INFO =================
@@ -73,52 +73,34 @@ const RunButton = () => {
       setExecutionInfo({
         time: data.time,
 
-        memory: data.memory,
-      });
+        memory: data.memory
+      })
     } catch (error) {
-      console.log(error);
+      console.log(error)
 
-      setOutput("Failed to run code");
+      setOutput('Failed to run code')
     } finally {
-      setIsRunning(false);
+      setIsRunning(false)
     }
-  };
+  }
 
   return (
     <button
-    id="run-code-btn"
+      id='run-code-btn'
       onClick={handleRunCode}
       disabled={isRunning}
-      className="
-        flex
-        items-center
-        gap-2
-        px-5
-        py-2
-        rounded-xl
-        bg-emerald-500
-        hover:bg-emerald-600
-        transition-all
-        cursor-pointer
-        font-medium
-        text-white
-        disabled:opacity-50
-      "
+      className='flex items-center gap-2 px-3 sm:px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-600 transition-all cursor-pointer font-medium text-white disabled:opacity-50 flex-shrink-0'
     >
       {isRunning ? (
-        <Loader2
-          size={18}
-          className="
-              animate-spin
-            "
-        />
+        <Loader2 size={18} className='animate-spin' />
       ) : (
         <Play size={18} />
       )}
-
-      {isRunning ? "Running..." : "Run Code"}
+      <span className='hidden sm:inline'>
+        {isRunning ? 'Running...' : 'Run Code'}
+      </span>
     </button>
-  );
-};
+  )
+}
 
-export default RunButton;
+export default RunButton
