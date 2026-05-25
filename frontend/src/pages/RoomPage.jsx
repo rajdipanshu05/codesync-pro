@@ -134,12 +134,12 @@ const RoomPage = () => {
   }, []);
 
   return (
-    <RoomLayout
-      sidebar={<RoomSidebar />}
-      editor={<CodeEditor />}
-      chat={<ChatBox />}
-    />
-  );
+  <RoomLayout
+    sidebar={<RoomSidebar />}
+    editor={<CodeEditor />}
+    chat={<ChatBox />}
+  />
+);
 };
 
 export default RoomPage;

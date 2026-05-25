@@ -20,7 +20,7 @@ import { socket } from "../../lib/socket";
 
 import { useParams } from "react-router-dom";
 
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 
 import { useRoomStore } from "../../store/roomStore";
 
@@ -28,6 +28,7 @@ const CodeEditor = () => {
   const navigate = useNavigate();
   const { roomId } = useParams();
   const { roomName } = useRoomStore();
+  const [isTerminalExpanded, setIsTerminalExpanded] = useState(false);
 
   useEffect(() => {
     socket.on("receive-code", (incomingCode) => {
@@ -122,7 +123,7 @@ const CodeEditor = () => {
           "
         >
           {/* RUN BUTTON */}
-          <RunButton  />
+          <RunButton />
 
           {/* LEAVE BUTTON */}
           <button
@@ -153,16 +154,20 @@ const CodeEditor = () => {
       <div
         className="
           flex-1
+          min-h-0
           p-5
+
         "
       >
         <div
           className="
             h-full
+            min-h-0
             overflow-hidden
             rounded-2xl
             border
             border-zinc-800
+
           "
         >
           <Editor
@@ -200,13 +205,22 @@ const CodeEditor = () => {
       {/* INPUT OUTPUT */}
       <div
         className="
-          h-[260px]
+
+          h-[280px]
+          md:h-[320px]
           border-t
           border-zinc-800
-          p-5
+
           grid
-          grid-cols-2
+          grid-cols-1
+          md:grid-cols-2
+
           gap-5
+          px-5a
+          pb-5
+          pt-3
+
+          overflow-hidden
         "
       >
         <InputBox />
