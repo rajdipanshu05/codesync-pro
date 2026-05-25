@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 import { useRoomStore } from "../../store/roomStore";
+
+import { socket } from "../../lib/socket";
 
 import { v4 as uuidv4 } from "uuid";
 import toast from "react-hot-toast";
@@ -24,6 +26,12 @@ const JoinRoomCard = () => {
     const newRoomId = uuidv4();
 
     setRoomName(roomName);
+
+    // create actual room
+    socket.emit("create-room", {
+      roomId: newRoomId,
+      roomName,
+    });
 
     navigate(`/room/${newRoomId}`);
   };
@@ -49,6 +57,8 @@ const JoinRoomCard = () => {
       toast.error("Failed to join room");
     }
   };
+
+
 
   return (
     <div

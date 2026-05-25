@@ -36,6 +36,7 @@ export const getReceiverSocketId = (userId) => {
   return userSocketMap.get(userId);
 };
 
+const roomCleanupTimers = new Map();
 // ================= SOCKET CONNECTION =================
 
 io.on("connection", (socket) => {
@@ -47,35 +48,47 @@ io.on("connection", (socket) => {
   // store online user
   userSocketMap.set(socket.userId, socket.id);
 
+  // ================= CREATE ROOM =================
+  socket.on("create-room", ({ roomId, roomName }) => {
+    if (rooms.has(roomId)) {
+      return;
+    }
+
+    rooms.set(roomId, {
+      roomId,
+
+      roomName: roomName || "CodeSync Room",
+
+      users: [],
+
+      code: `console.log("Hello World");`,
+
+      language: "javascript",
+
+      theme: "vs-dark",
+
+      chats: [],
+    });
+  });
+
   // ================= JOIN ROOM =================
-  const roomCleanupTimers = new Map();
 
   socket.on("join-room", ({ roomId, roomName }) => {
+    if (!rooms.has(roomId)) {
+      socket.emit("room-not-found");
+
+      return;
+    }
+
+    // clear cleanup timer
     if (roomCleanupTimers.has(roomId)) {
       clearTimeout(roomCleanupTimers.get(roomId));
 
       roomCleanupTimers.delete(roomId);
     }
+
+    // NOW join
     socket.join(roomId);
-
-    // create room
-    if (!rooms.has(roomId)) {
-      rooms.set(roomId, {
-        roomId,
-
-        roomName: roomName || "CodeSync Room",
-
-        users: [],
-
-        code: `console.log("Hello World");`,
-
-        language: "javascript",
-
-        theme: "vs-dark",
-
-        chats: [],
-      });
-    }
 
     const room = rooms.get(roomId);
 

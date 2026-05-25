@@ -20,9 +20,13 @@ import { useChatStore } from "../store/chatStore";
 
 import { useEditorStore } from "../store/editorStore";
 
+import { useNavigate } from "react-router-dom";
+
+import toast from "react-hot-toast";
+
 const RoomPage = () => {
   useSocket();
-
+  const navigate = useNavigate();
   const { roomId } = useParams();
 
   const { setActiveUsers, roomName, setRoomName } = useRoomStore();
@@ -31,13 +35,25 @@ const RoomPage = () => {
 
   const { setCode, setLanguage, setTheme } = useEditorStore();
 
+  // ================= ROOM NOT FOUND =================
+
+  useEffect(() => {
+    socket.on("room-not-found", () => {
+      toast.error("Room does not exist");
+
+      navigate("/");
+    });
+
+    return () => {
+      socket.off("room-not-found");
+    };
+  }, []);
   // ================= JOIN ROOM =================
 
   useEffect(() => {
     const handleConnect = () => {
       socket.emit("join-room", {
         roomId,
-        roomName,
       });
     };
 
@@ -62,7 +78,7 @@ const RoomPage = () => {
       setTheme(room.theme);
 
       // language first
-      setLanguage(room.language,true);
+      setLanguage(room.language, true);
 
       // then latest code
       setCode(room.code || "");
