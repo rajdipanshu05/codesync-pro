@@ -1,4 +1,6 @@
+import { useEditorStore } from "../../store/editorStore";
 const InputBox = () => {
+  const { input, setInput } = useEditorStore();
   return (
     <div
       className="
@@ -22,16 +24,18 @@ const InputBox = () => {
       </h3>
 
       <textarea
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
         placeholder="Custom input..."
         className="
-          w-full
-          h-[120px]
-          resize-none
-          bg-transparent
-          outline-none
-          text-white
-          placeholder:text-zinc-500
-        "
+    w-full
+    h-[120px]
+    resize-none
+    bg-transparent
+    outline-none
+    text-white
+    placeholder:text-zinc-500
+  "
       />
     </div>
   );

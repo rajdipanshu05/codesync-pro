@@ -56,6 +56,7 @@ const RoomPage = () => {
 
   useEffect(() => {
     socket.on("room-state", (room) => {
+      console.log(room);
       setRoomName(room.roomName);
 
       setTheme(room.theme);

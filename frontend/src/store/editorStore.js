@@ -1,63 +1,70 @@
 import { create } from "zustand";
 
-import {
-  LANGUAGE_SNIPPETS,
-} from "../utils/constants";
+import { LANGUAGE_SNIPPETS } from "../utils/constants";
 
-export const useEditorStore =
-  create((set) => ({
+export const useEditorStore = create((set) => ({
+  language: "javascript",
 
-    language:
-      "javascript",
+  theme: "vs-dark",
 
-    theme:
-      "vs-dark",
+  code: LANGUAGE_SNIPPETS.javascript,
 
-    code:
-      LANGUAGE_SNIPPETS
-        .javascript,
+  input: "",
 
+  output: "",
 
-    // ================= SET LANGUAGE =================
+  executionInfo: null,
 
-    setLanguage:
-      (
-        language,
-        preserveCode = true
-      ) =>
+  isRunning: false,
 
-        set((state) => ({
+  // ================= SET LANGUAGE =================
 
-          language,
+  setLanguage: (language, preserveCode = true) =>
+    set((state) => ({
+      language,
 
-          code:
-            preserveCode
-              ? state.code
-              : LANGUAGE_SNIPPETS[
-                  language
-                ],
-        })),
+      code: preserveCode ? state.code : LANGUAGE_SNIPPETS[language],
+    })),
 
+  // ================= SET THEME =================
 
+  setTheme: (theme) =>
+    set({
+      theme,
+    }),
 
-    // ================= SET THEME =================
+  // ================= SET CODE =================
 
-    setTheme:
-      (theme) =>
+  setCode: (code) =>
+    set({
+      code,
+    }),
 
-        set({
-          theme,
-        }),
+  // ================= SET INPUT =================
 
+  setInput: (input) =>
+    set({
+      input,
+    }),
 
+  // ================= SET OUTPUT =================
 
-    // ================= SET CODE =================
+  setOutput: (output) =>
+    set({
+      output,
+    }),
 
-    setCode:
-      (code) =>
+  // ================= SET RUNNING =================
 
-        set({
-          code,
-        }),
+  setIsRunning: (isRunning) =>
+    set({
+      isRunning,
+    }),
 
+  // ================= SET EXECUTION INFO =================
+
+  setExecutionInfo: (executionInfo) =>
+    set({
+      executionInfo,
+    }),
 }));

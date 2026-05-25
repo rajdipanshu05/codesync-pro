@@ -43,16 +43,27 @@ const CodeEditor = () => {
 
   // ================= LEAVE ROOM =================
 
-  const handleLeaveRoom =
-  () => {
-
-    socket.emit(
-      "leave-room",
-      { roomId }
-    );
+  const handleLeaveRoom = () => {
+    socket.emit("leave-room", { roomId });
 
     navigate("/");
   };
+
+  useEffect(() => {
+    const handleShortcut = (e) => {
+      if (e.ctrlKey && e.key === "Enter") {
+        e.preventDefault();
+
+        document.getElementById("run-code-btn")?.click();
+      }
+    };
+
+    window.addEventListener("keydown", handleShortcut);
+
+    return () => {
+      window.removeEventListener("keydown", handleShortcut);
+    };
+  }, []);
 
   return (
     <div
@@ -111,7 +122,7 @@ const CodeEditor = () => {
           "
         >
           {/* RUN BUTTON */}
-          <RunButton />
+          <RunButton  />
 
           {/* LEAVE BUTTON */}
           <button

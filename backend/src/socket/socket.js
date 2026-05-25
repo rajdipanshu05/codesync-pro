@@ -29,7 +29,7 @@ const userSocketMap = new Map();
 
 // ================= ROOMS =================
 
-const rooms = new Map();
+export const rooms = new Map();
 
 // helper function
 export const getReceiverSocketId = (userId) => {
@@ -48,8 +48,14 @@ io.on("connection", (socket) => {
   userSocketMap.set(socket.userId, socket.id);
 
   // ================= JOIN ROOM =================
+  const roomCleanupTimers = new Map();
 
   socket.on("join-room", ({ roomId, roomName }) => {
+    if (roomCleanupTimers.has(roomId)) {
+      clearTimeout(roomCleanupTimers.get(roomId));
+
+      roomCleanupTimers.delete(roomId);
+    }
     socket.join(roomId);
 
     // create room
@@ -227,11 +233,28 @@ io.on("connection", (socket) => {
       // delete empty room
       if (room.users.length === 0) {
         console.log(
-          `Deleting Room:
-               ${roomId}`,
+          `Room Empty:
+     ${roomId}`,
         );
 
-        rooms.delete(roomId);
+        // start cleanup timer
+        const timer = setTimeout(() => {
+          const existingRoom = rooms.get(roomId);
+
+          // still empty
+          if (existingRoom && existingRoom.users.length === 0) {
+            rooms.delete(roomId);
+
+            roomCleanupTimers.delete(roomId);
+
+            console.log(
+              `Deleted Room:
+         ${roomId}`,
+            );
+          }
+        }, 30000); // 30 sec
+
+        roomCleanupTimers.set(roomId, timer);
       }
     }
   });

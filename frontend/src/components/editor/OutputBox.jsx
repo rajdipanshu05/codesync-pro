@@ -1,4 +1,12 @@
+import { useEditorStore } from "../../store/editorStore";
+
 const OutputBox = () => {
+
+  const {
+    output,
+    executionInfo,
+  } = useEditorStore();
+
   return (
     <div
       className="
@@ -11,26 +19,62 @@ const OutputBox = () => {
         overflow-y-auto
       "
     >
-      <h3
+
+      <div
         className="
-          text-sm
-          font-semibold
+          flex
+          items-center
+          justify-between
           mb-3
-          text-zinc-400
         "
       >
-        Output
-      </h3>
+
+        <h3
+          className="
+            text-sm
+            font-semibold
+            text-zinc-400
+          "
+        >
+          Output
+        </h3>
+
+        {
+          executionInfo && (
+
+            <div
+              className="
+                text-xs
+                text-zinc-500
+                flex
+                gap-4
+              "
+            >
+              <span>
+                Time:
+                {executionInfo.time}s
+              </span>
+
+              <span>
+                Memory:
+                {executionInfo.memory} KB
+              </span>
+            </div>
+          )
+        }
+
+      </div>
 
       <pre
         className="
           text-sm
-          text-zinc-300
           whitespace-pre-wrap
+          text-zinc-300
         "
       >
-        Output will appear here...
+        {output || "Run code to see output"}
       </pre>
+
     </div>
   );
 };
