@@ -1,31 +1,19 @@
-import {
-  TerminalSquare,
-  Trash2,
-} from "lucide-react";
+import { TerminalSquare, Trash2 } from 'lucide-react'
 
-import { useEditorStore } from "../../store/editorStore";
+import { useEditorStore } from '../../store/editorStore'
 
 const InputBox = () => {
-
-  const {
-    input,
-    setInput,
-  } = useEditorStore();
-
+  const { input, setInput } = useEditorStore()
 
   // ================= CLEAR INPUT =================
 
-  const handleClearInput =
-    () => {
-
-      setInput("");
-    };
-
+  const handleClearInput = () => {
+    setInput('')
+  }
 
   return (
-
     <div
-      className="
+      className='
         h-full
 
         bg-zinc-900/80
@@ -42,72 +30,64 @@ const InputBox = () => {
 
         backdrop-blur
         shadow-lg
-      "
+      '
     >
-
       {/* HEADER */}
       <div
-        className="
+        className='
           flex
           items-center
           justify-between
 
           mb-4
-        "
+        '
       >
-
         {/* LEFT */}
         <div
-          className="
+          className='
             flex
             items-center
             gap-2
-          "
+          '
         >
-
           <TerminalSquare
             size={18}
-            className="
+            className='
               text-blue-400
-            "
+            '
           />
 
           <h3
-            className="
+            className='
               text-sm
               font-semibold
               text-zinc-300
-            "
+            '
           >
             Input
           </h3>
-
         </div>
-
 
         {/* RIGHT */}
         <div
-          className="
+          className='
             flex
             items-center
             gap-3
-          "
+          '
         >
-
           <span
-            className="
+            className='
               text-xs
               text-zinc-500
-            "
+            '
           >
             stdin
           </span>
 
           <button
-            onClick={
-              handleClearInput
-            }
-            className="
+            onClick={handleClearInput}
+            className='
               p-1.5
 
               rounded-lg
@@ -116,42 +96,30 @@ const InputBox = () => {
 
               transition-all
               cursor-pointer
-            "
+            '
           >
-
             <Trash2
               size={15}
-              className="
+              className='
                 text-zinc-500
-              "
+              '
             />
-
           </button>
-
         </div>
-
       </div>
-
 
       {/* TEXTAREA */}
       <textarea
         value={input}
-
-        onChange={(e) =>
-          setInput(
-            e.target.value
-          )
-        }
-
-        placeholder="
+        onChange={e => setInput(e.target.value)}
+        placeholder='
 Enter custom input...
 
 Example:
 5
 1 2 3 4 5
-"
-
-        className="
+'
+        className='
           flex-1
 
           resize-none
@@ -175,11 +143,10 @@ Example:
           focus:border-blue-500
 
           transition-all
-        "
+        '
       />
-
     </div>
-  );
-};
+  )
+}
 
-export default InputBox;
+export default InputBox
