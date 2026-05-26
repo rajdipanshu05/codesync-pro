@@ -10,11 +10,10 @@ export const app = express();
 
 export const server = http.createServer(app);
 
-const serverUrl = (ENV.MODE === "development") ? "http://localhost:5173" : "";
+const serverUrl = (ENV.MODE === "development") ? "http://localhost:5173" : "https://codesync-un48.onrender.com";
 export const io = new Server(server, {
   cors: {
     origin: serverUrl,
-
     credentials: true,
   },
 });
