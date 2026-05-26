@@ -3,12 +3,10 @@
 import { User } from "../models/user.model.js";
 import { generateToken } from "../utils/generateToken.js";
 
-
 // ================= SIGNUP =================
 
 export const signup = async (req, res) => {
   try {
-
     let { username, email, password } = req.body;
 
     // trim + normalize
@@ -67,8 +65,11 @@ export const signup = async (req, res) => {
     // send cookie
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "none",
+
+      secure: process.env.NODE_ENV === "development",
+
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -82,9 +83,7 @@ export const signup = async (req, res) => {
         avatar: user.avatar,
       },
     });
-
   } catch (error) {
-
     console.error("Signup Error:", error);
 
     return res.status(500).json({
@@ -93,12 +92,10 @@ export const signup = async (req, res) => {
   }
 };
 
-
 // ================= LOGIN =================
 
 export const login = async (req, res) => {
   try {
-
     let { email, password } = req.body;
 
     email = email?.trim().toLowerCase();
@@ -111,8 +108,7 @@ export const login = async (req, res) => {
     }
 
     // find user
-    const user = await User.findOne({ email })
-      .select("+password");
+    const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
       return res.status(400).json({
@@ -121,8 +117,7 @@ export const login = async (req, res) => {
     }
 
     // compare password
-    const isPasswordCorrect =
-      await user.comparePassword(password);
+    const isPasswordCorrect = await user.comparePassword(password);
 
     if (!isPasswordCorrect) {
       return res.status(400).json({
@@ -136,8 +131,11 @@ export const login = async (req, res) => {
     // send cookie
     res.cookie("jwt", token, {
       httpOnly: true,
-      secure: false,
-      sameSite: "none",
+
+      secure: process.env.NODE_ENV === "development",
+
+      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -151,9 +149,7 @@ export const login = async (req, res) => {
         avatar: user.avatar,
       },
     });
-
   } catch (error) {
-
     console.error("Login Error:", error);
 
     return res.status(500).json({
@@ -162,31 +158,30 @@ export const login = async (req, res) => {
   }
 };
 
-
 // ================= LOGOUT =================
 
 export const logout = async (_, res) => {
+  res.clearCookie("jwt", {
+    httpOnly: true,
 
-  res.clearCookie("jwt");
-  // res.clearCookie("token");
+    secure: process.env.NODE_ENV === "development",
+
+    sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+  });
 
   return res.status(200).json({
     message: "Logout successful",
   });
 };
 
-
 // ================= CHECK AUTH =================
 
 export const checkAuth = async (req, res) => {
   try {
-
     return res.status(200).json({
       user: req.user,
     });
-
   } catch (error) {
-
     console.error("Check Auth Error:", error);
 
     return res.status(500).json({
