@@ -13,9 +13,10 @@ const PORT = ENV.PORT || 3000;
 // const app = express();
 //payload too large error
 app.use(express.json({ limit: "5mb" })); //req.body
+const clientUrl = (ENV.MODE === "development") ? "http://localhost:5173" : "";
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: clientUrl,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
   }),

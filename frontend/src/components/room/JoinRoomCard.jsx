@@ -1,4 +1,4 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -6,7 +6,10 @@ import { useRoomStore } from "../../store/roomStore";
 
 import { socket } from "../../lib/socket";
 
+import { axiosInstance } from "../../api/axios";
+
 import { v4 as uuidv4 } from "uuid";
+
 import toast from "react-hot-toast";
 
 const JoinRoomCard = () => {
@@ -42,13 +45,12 @@ const JoinRoomCard = () => {
     if (!roomId.trim()) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/rooms/${roomId}`);
+      const response = await axiosInstance.get(`/rooms/${roomId}`);
 
-      const data = await response.json();
+      const data = response.data;
 
       if (!data.exists) {
         toast.error("Room does not exist");
-
         return;
       }
 
@@ -57,8 +59,6 @@ const JoinRoomCard = () => {
       toast.error("Failed to join room");
     }
   };
-
-
 
   return (
     <div

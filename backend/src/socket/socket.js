@@ -5,14 +5,15 @@ import http from "http";
 import express from "express";
 
 import { socketAuthMiddleware } from "../middlewares/socket.auth.middleware.js";
-
+import { ENV } from "../config/env.js";
 export const app = express();
 
 export const server = http.createServer(app);
 
+const serverUrl = (ENV.MODE === "development") ? "http://localhost:5173" : "";
 export const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: serverUrl,
 
     credentials: true,
   },
