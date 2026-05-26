@@ -13,7 +13,7 @@ const PORT = ENV.PORT || 3000;
 // const app = express();
 //payload too large error
 app.use(express.json({ limit: "5mb" })); //req.body
-const clientUrl = (ENV.MODE === "development") ? "http://localhost:5173" : "";
+const clientUrl = (ENV.MODE === "development") ? "http://localhost:5173" : "https://codesync-un48.onrender.com";
 app.use(
   cors({
     origin: clientUrl,
