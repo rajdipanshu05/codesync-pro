@@ -3,22 +3,22 @@ import { io } from "socket.io-client";
 
 
 // development
-export const socket = io(
-  "http://localhost:8000",
-  {
-    withCredentials: true,
-    autoConnect: false,
-  }
-);
-
-//production
 // export const socket = io(
-//   "https://codesync-backend-0xnc.onrender.com",
+//   "http://localhost:8000",
 //   {
 //     withCredentials: true,
 //     autoConnect: false,
 //   }
 // );
+
+//production
+export const socket = io(
+  "https://codesync-backend-0xnc.onrender.com",
+  {
+    withCredentials: true,
+    autoConnect: false,
+  }
+);
 
 
 
