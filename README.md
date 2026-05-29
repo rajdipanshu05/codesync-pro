@@ -12,6 +12,8 @@ src/
 │   │   ├── LoginForm.jsx
 │   │   └── SignupForm.jsx
 │   │
+│   ├──videoMeeting.jsx
+│   │
 │   ├── room/
 │   │   ├── RoomSidebar.jsx
 │   │   ├── ActiveUsers.jsx
