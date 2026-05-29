@@ -10,8 +10,7 @@ import codeRoutes from "./routes/code.route.js";
 import roomRoutes from "./routes/room.route.js";
 
 const PORT = ENV.PORT || 3000;
-// const app = express();
-//payload too large error
+
 app.use(express.json({ limit: "5mb" })); //req.body
 const clientUrl = (ENV.MODE === "development") ? "http://localhost:5173" : "https://codesync-un48.onrender.com";
 app.use(
@@ -23,17 +22,6 @@ app.use(
 );
 app.use(cookieParser());
 
-// const axios = require("axios");
-
-// const response = await axios.post(
-//   "https://ce.judge0.com/submissions?base64_encoded=false&wait=true",
-//   {
-//     language_id: 63,
-//     source_code: "console.log('Ayush Goyal')"
-//   }
-// );
-// console.log(response);
-// console.log(response.data.stdout);
 
 //Routes
 app.use("/api/auth", authRoutes);

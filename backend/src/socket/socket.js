@@ -78,7 +78,6 @@ io.on("connection", (socket) => {
   socket.on("join-room", ({ roomId, roomName }) => {
     if (!rooms.has(roomId)) {
       socket.emit("room-not-found");
-
       return;
     }
 
@@ -134,6 +133,7 @@ io.on("connection", (socket) => {
     room.code = code;
 
     // sync code
+    // socket.to(roomId).emit("receive-code", code);
     socket.to(roomId).emit("receive-code", code);
   });
 
@@ -212,19 +212,18 @@ io.on("connection", (socket) => {
 
     io.to(roomId).emit("active-users", room.users);
 
-    console.log(
-      `${socket.user.username}
-       left room ${roomId}`,
-    );
+    // console.log(
+    //   `${socket.user.username}
+    //    left room ${roomId}`,
+    // );
 
     // delete empty room
     if (room.users.length === 0) {
       rooms.delete(roomId);
-
-      console.log(
-        `Deleted Room:
-         ${roomId}`,
-      );
+      // console.log(
+      //   `Deleted Room:
+      //    ${roomId}`,
+      // );
     }
   });
 

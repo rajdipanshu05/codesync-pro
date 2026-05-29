@@ -12,7 +12,10 @@ import { v4 as uuidv4 } from "uuid";
 
 import toast from "react-hot-toast";
 
+// import useSocket from "../../hooks/useSocket";
+
 const JoinRoomCard = () => {
+  // useSocket();
   const navigate = useNavigate();
 
   const { setRoomName } = useRoomStore();
@@ -20,11 +23,13 @@ const JoinRoomCard = () => {
   const [roomName, setRoomNameInput] = useState("");
 
   const [roomId, setRoomId] = useState("");
+  
 
   // ================= CREATE ROOM =================
 
   const handleCreateRoom = () => {
     if (!roomName.trim()) return;
+    console.log(socket.connected);
 
     const newRoomId = uuidv4();
 
