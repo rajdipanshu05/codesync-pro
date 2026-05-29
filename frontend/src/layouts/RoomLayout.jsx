@@ -6,45 +6,48 @@ import {
   X,
   Code2,
   Menu,
-  Code,
-} from "lucide-react";
+  Code
+} from 'lucide-react'
 
-import { useState } from "react";
+import { useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-import RoomSidebar from "../components/room/RoomSidebar";
+import RoomSidebar from '../components/room/RoomSidebar'
+import VideoMeeting from '../components/videoMeeting'
 
 const RoomLayout = ({ editor, chat }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { roomId } = useParams()
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
-  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true);
+  const [isRightPanelOpen, setIsRightPanelOpen] = useState(true)
 
-  const [activeTab, setActiveTab] = useState("chat");
+  const [activeTab, setActiveTab] = useState('chat')
 
   // Mobile: which main panel is visible — "editor" or "chat"
-  const [mobileView, setMobileView] = useState("editor");
+  const [mobileView, setMobileView] = useState('editor')
 
   // Mobile: drawer open state
-  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false)
 
   return (
     <div
-      className="
+      className='
         h-screen
         bg-zinc-950
         text-white
         flex
         overflow-hidden
         relative
-      "
+      '
     >
       {/* ===================== MOBILE DRAWER OVERLAY ===================== */}
       {isDrawerOpen && (
         <div
-          className="
+          className='
             fixed inset-0 z-40
             bg-black/60
             md:hidden
-          "
+          '
           onClick={() => setIsDrawerOpen(false)}
         />
       )}
@@ -66,12 +69,12 @@ const RoomLayout = ({ editor, chat }) => {
 
           /* ---- desktop ---- */
           hidden md:flex
-          ${isSidebarOpen ? "md:w-[260px]" : "md:w-[72px]"}
+          ${isSidebarOpen ? 'md:w-[260px]' : 'md:w-[72px]'}
 
           /* ---- mobile drawer ---- */
           md:static
           fixed top-0 left-0 z-50
-          ${isDrawerOpen ? "flex w-[260px]" : "w-0"}
+          ${isDrawerOpen ? 'flex w-[260px]' : 'w-0'}
         `}
       >
         {/* TOPBAR */}
@@ -86,30 +89,30 @@ const RoomLayout = ({ editor, chat }) => {
             shrink-0
             ${
               isSidebarOpen || isDrawerOpen
-                ? "justify-between"
-                : "justify-center"
+                ? 'justify-between'
+                : 'justify-center'
             }
           `}
         >
           {/* LEFT SIDE — shown when open */}
           {(isSidebarOpen || isDrawerOpen) && (
-            <div className="flex items-center gap-3 overflow-hidden">
+            <div className='flex items-center gap-3 overflow-hidden'>
               <div
-                className="
+                className='
                   size-10 rounded-xl
                   bg-blue-500/10
                   border border-blue-500/20
                   flex items-center justify-center
                   shrink-0
-                "
+                '
               >
-                <Code2 size={22} className="text-blue-500" />
+                <Code2 size={22} className='text-blue-500' />
               </div>
               <div>
-                <h1 className="text-2xl font-bold whitespace-nowrap">
+                <h1 className='text-2xl font-bold whitespace-nowrap'>
                   CodeSync
                 </h1>
-                <p className="text-xs text-zinc-500 whitespace-nowrap">
+                <p className='text-xs text-zinc-500 whitespace-nowrap'>
                   Collaborative Editor
                 </p>
               </div>
@@ -120,12 +123,12 @@ const RoomLayout = ({ editor, chat }) => {
           <button
             onClick={() => {
               if (isDrawerOpen) {
-                setIsDrawerOpen(false);
+                setIsDrawerOpen(false)
               } else {
-                setIsSidebarOpen(!isSidebarOpen);
+                setIsSidebarOpen(!isSidebarOpen)
               }
             }}
-            className="p-2 rounded-lg hover:bg-zinc-800 transition-all shrink-0"
+            className='p-2 rounded-lg hover:bg-zinc-800 transition-all shrink-0'
           >
             {isSidebarOpen || isDrawerOpen ? (
               <ChevronLeft size={18} />
@@ -136,17 +139,16 @@ const RoomLayout = ({ editor, chat }) => {
         </div>
 
         {/* SIDEBAR CONTENT */}
-        <div className="flex-1 overflow-hidden">
+        <div className='flex-1 overflow-hidden'>
           <RoomSidebar isSidebarOpen={isSidebarOpen || isDrawerOpen} />
         </div>
       </aside>
 
       {/* ===================== MAIN ===================== */}
-      <main className="flex-1 flex flex-col overflow-hidden min-w-0">
-
+      <main className='flex-1 flex flex-col overflow-hidden min-w-0'>
         {/* ---- MOBILE TOPBAR ---- */}
         <div
-          className="
+          className='
             md:hidden
             h-14
             border-b border-zinc-800
@@ -154,36 +156,35 @@ const RoomLayout = ({ editor, chat }) => {
             flex items-center justify-between
             px-4
             shrink-0
-          "
+          '
         >
           {/* Hamburger */}
           <button
             onClick={() => setIsDrawerOpen(true)}
-            className="p-2 rounded-lg hover:bg-zinc-800 transition-all"
+            className='p-2 rounded-lg hover:bg-zinc-800 transition-all'
           >
             <Menu size={20} />
           </button>
 
           {/* Logo */}
-          <div className="flex items-center gap-2">
-            <Code2 size={18} className="text-blue-500" />
-            <span className="font-bold text-lg">CodeSync</span>
+          <div className='flex items-center gap-2'>
+            <Code2 size={18} className='text-blue-500' />
+            <span className='font-bold text-lg'>CodeSync</span>
           </div>
 
           {/* Placeholder to centre logo */}
-          <div className="w-9" />
+          <div className='w-9' />
         </div>
 
         {/* ---- CONTENT ROW (editor + right panel) ---- */}
-        <div className="flex-1 flex overflow-hidden min-h-0">
-
+        <div className='flex-1 flex overflow-hidden min-h-0'>
           {/* EDITOR */}
           <section
             className={`
               flex-1 min-w-0 overflow-hidden flex flex-col
 
               /* mobile: show/hide based on mobileView */
-              ${mobileView === "editor" ? "flex" : "hidden"}
+              ${mobileView === 'editor' ? 'flex' : 'hidden'}
               md:flex
             `}
           >
@@ -202,31 +203,31 @@ const RoomLayout = ({ editor, chat }) => {
 
                 /* mobile: full width, only visible when mobileView === chat */
                 w-full
-                ${mobileView === "chat" ? "flex" : "hidden"}
+                ${mobileView === 'chat' ? 'flex' : 'hidden'}
                 md:flex md:w-[340px]
               `}
             >
               {/* TOPBAR */}
               <div
-                className="
+                className='
                   h-16
                   border-b border-zinc-800
                   px-4
                   flex items-center justify-between
-                "
+                '
               >
                 {/* TABS */}
-                <div className="flex items-center gap-2">
+                <div className='flex items-center gap-2'>
                   <button
-                    onClick={() => setActiveTab("chat")}
+                    onClick={() => setActiveTab('chat')}
                     className={`
                       px-4 py-2 rounded-xl
                       flex items-center gap-2
                       transition-all
                       ${
-                        activeTab === "chat"
-                          ? "bg-blue-500 text-white"
-                          : "bg-zinc-800 text-zinc-400"
+                        activeTab === 'chat'
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-zinc-800 text-zinc-400'
                       }
                     `}
                   >
@@ -235,15 +236,15 @@ const RoomLayout = ({ editor, chat }) => {
                   </button>
 
                   <button
-                    onClick={() => setActiveTab("video")}
+                    onClick={() => setActiveTab('video')}
                     className={`
                       px-4 py-2 rounded-xl
                       flex items-center gap-2
                       transition-all
                       ${
-                        activeTab === "video"
-                          ? "bg-blue-500 text-white"
-                          : "bg-zinc-800 text-zinc-400"
+                        activeTab === 'video'
+                          ? 'bg-blue-500 text-white'
+                          : 'bg-zinc-800 text-zinc-400'
                       }
                     `}
                   >
@@ -255,32 +256,30 @@ const RoomLayout = ({ editor, chat }) => {
                 {/* CLOSE — desktop only */}
                 <button
                   onClick={() => setIsRightPanelOpen(false)}
-                  className="
+                  className='
                     p-2 rounded-lg
                     hover:bg-zinc-800
                     transition-all
                     hidden md:block
-                  "
+                  '
                 >
                   <X size={18} />
                 </button>
               </div>
 
               {/* PANEL CONTENT */}
-              <div className="flex-1 overflow-hidden">
-                {activeTab === "chat" ? (
-                  chat
-                ) : (
-                  <div
-                    className="
-                      h-full
-                      flex items-center justify-center
-                      text-zinc-500
-                    "
-                  >
-                    Video call coming soon 🚀
-                  </div>
-                )}
+              <div className='flex-1 overflow-hidden'>
+                <div
+                  className={activeTab === 'chat' ? 'block h-full' : 'hidden'}
+                >
+                  {chat}
+                </div>
+
+                <div
+                  className={activeTab === 'video' ? 'block h-full' : 'hidden'}
+                >
+                  <VideoMeeting id={roomId} />
+                </div>
               </div>
             </aside>
           )}
@@ -288,22 +287,22 @@ const RoomLayout = ({ editor, chat }) => {
 
         {/* ---- MOBILE BOTTOM TAB BAR ---- */}
         <nav
-          className="
+          className='
             md:hidden
             h-14
             border-t border-zinc-800
             bg-zinc-900
             flex items-center
             shrink-0
-          "
+          '
         >
           <button
-            onClick={() => setMobileView("editor")}
+            onClick={() => setMobileView('editor')}
             className={`
               flex-1 h-full
               flex flex-col items-center justify-center gap-1
               text-xs transition-all
-              ${mobileView === "editor" ? "text-blue-400" : "text-zinc-500"}
+              ${mobileView === 'editor' ? 'text-blue-400' : 'text-zinc-500'}
             `}
           >
             <Code size={18} />
@@ -312,14 +311,14 @@ const RoomLayout = ({ editor, chat }) => {
 
           <button
             onClick={() => {
-              setMobileView("chat");
-              setIsRightPanelOpen(true);
+              setMobileView('chat')
+              setIsRightPanelOpen(true)
             }}
             className={`
               flex-1 h-full
               flex flex-col items-center justify-center gap-1
               text-xs transition-all
-              ${mobileView === "chat" ? "text-blue-400" : "text-zinc-500"}
+              ${mobileView === 'chat' ? 'text-blue-400' : 'text-zinc-500'}
             `}
           >
             <MessageSquare size={18} />
@@ -332,20 +331,20 @@ const RoomLayout = ({ editor, chat }) => {
       {!isRightPanelOpen && (
         <button
           onClick={() => setIsRightPanelOpen(true)}
-          className="
+          className='
             absolute right-5 bottom-5 z-50
             size-14 rounded-full
             bg-blue-500 hover:bg-blue-600
             flex items-center justify-center
             shadow-lg transition-all
             hidden md:flex
-          "
+          '
         >
           <MessageSquare size={22} />
         </button>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default RoomLayout;
+export default RoomLayout

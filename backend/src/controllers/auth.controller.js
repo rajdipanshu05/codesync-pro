@@ -2,6 +2,7 @@
 
 import { User } from "../models/user.model.js";
 import { generateToken } from "../utils/generateToken.js";
+import { ENV } from "../config/env.js";
 
 // ================= SIGNUP =================
 
@@ -66,9 +67,9 @@ export const signup = async (req, res) => {
     res.cookie("jwt", token, {
       httpOnly: true,
 
-      secure: process.env.NODE_ENV === "production",
+      secure: ENV.MODE === "production",
 
-      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+      sameSite: ENV.MODE === "development" ? "lax" : "none",
 
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -132,9 +133,9 @@ export const login = async (req, res) => {
     res.cookie("jwt", token, {
       httpOnly: true,
 
-      secure: process.env.NODE_ENV === "production",
+      secure: ENV.MODE === "production",
 
-      sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+      sameSite: ENV.MODE === "development" ? "lax" : "none",
 
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
@@ -164,9 +165,9 @@ export const logout = async (_, res) => {
   res.clearCookie("jwt", {
     httpOnly: true,
 
-    secure: process.env.NODE_ENV === "production",
+    secure: ENV.MODE === "production",
 
-    sameSite: process.env.NODE_ENV === "development" ? "lax" : "none",
+    sameSite: ENV.MODE === "development" ? "lax" : "none",
   });
 
   return res.status(200).json({

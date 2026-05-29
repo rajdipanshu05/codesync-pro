@@ -5,6 +5,7 @@ import http from "http";
 import express from "express";
 
 import { socketAuthMiddleware } from "../middlewares/socket.auth.middleware.js";
+import {connectToVideoMeetSocket} from './socketVideoCall.js'
 import { ENV } from "../config/env.js";
 export const app = express();
 
@@ -19,6 +20,7 @@ export const io = new Server(server, {
 });
 
 // ================= SOCKET AUTH =================
+connectToVideoMeetSocket(io);
 
 io.use(socketAuthMiddleware);
 
