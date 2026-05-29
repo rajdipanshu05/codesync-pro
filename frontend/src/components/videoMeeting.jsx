@@ -596,6 +596,7 @@ const VideoMeeting = ({ id }) => {
         window.localStream = blackSilenceStream()
         localVideoref.current.srcObject = window.localStream
         getUserMedia()
+        console.log("hi")
       }
     })
   }
