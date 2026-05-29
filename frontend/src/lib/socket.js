@@ -11,7 +11,7 @@ import { io } from "socket.io-client";
 //   }
 // );
 
-//production
+// production
 export const socket = io(
   "https://codesync-backend-0xnc.onrender.com",
   {
