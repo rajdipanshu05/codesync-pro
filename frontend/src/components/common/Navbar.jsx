@@ -1,6 +1,6 @@
 import { LogOut, Code2 } from "lucide-react";
-
 import { useAuthStore } from "../../store/authStore";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const { user, logout } = useAuthStore();
@@ -21,47 +21,109 @@ const Navbar = () => {
           mx-auto
           px-6
           py-4
+
           flex
           items-center
           justify-between
         "
       >
-        {/* LEFT */}
-        <div className="flex items-center gap-3">
-          <div
+        {/* LEFT SECTION */}
+        <div
+          className="
+            flex
+            items-center
+            gap-10
+          "
+        >
+          {/* LOGO */}
+          <Link
+            to="/"
             className="
-              p-2
-              rounded-xl
-              bg-blue-500/10
-              border
-              border-blue-500/20
+              flex
+              items-center
+              gap-3
             "
           >
-            <Code2 className="text-blue-500" />
-          </div>
+            <div
+              className="
+                p-2
+                rounded-xl
+                bg-blue-500/10
+                border
+                border-blue-500/20
+              "
+            >
+              <Code2 className="text-blue-500" />
+            </div>
 
-          <h1
-            className="
-              text-2xl
-              font-bold
-              text-white
-            "
-          >
-            CodeSync
-          </h1>
+            <h1
+              className="
+                text-2xl
+                font-bold
+                text-white
+              "
+            >
+              CodeSync
+            </h1>
+          </Link>
+
+          {/* PRACTICE PROBLEMS */}
+          <Link
+  to="/problems"
+  className="
+    flex
+    items-center
+    gap-2
+
+    text-zinc-400
+    hover:text-white
+
+    transition-all
+    font-medium
+  "
+>
+  Problems
+
+  <span
+    className="
+      px-2
+      py-0.5
+
+      text-[10px]
+
+      rounded-full
+
+      bg-blue-500/15
+      text-blue-400
+
+      border
+      border-blue-500/20
+    "
+  >
+    NEW
+  </span>
+</Link>
         </div>
 
-        {/* RIGHT */}
-        <div className="flex items-center gap-4">
-          {/* USER */}
+        {/* RIGHT SECTION */}
+        <div
+          className="
+            flex
+            items-center
+            gap-4
+          "
+        >
+          {/* USER AVATAR */}
           <div
             className="
               size-10
               rounded-full
               bg-blue-500
+
               flex
               items-center
               justify-center
+
               font-bold
               text-white
             "
@@ -76,15 +138,23 @@ const Navbar = () => {
               flex
               items-center
               gap-2
+
               px-4
               py-2
+
               rounded-xl
+
               bg-zinc-900
+
               border
               border-zinc-800
+
               hover:bg-zinc-800
+
               transition-all
+
               cursor-pointer
+
               text-white
             "
           >

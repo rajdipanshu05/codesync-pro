@@ -9,6 +9,7 @@ import HomePage from "../pages/HomePage";
 import RoomPage from "../pages/RoomPage";
 
 import ProtectedRoute from "../components/common/ProtectedRoute";
+import ProblemList from "../components/problems/ProblemList";
 
 const AppRoutes = () => {
   return (
@@ -33,6 +34,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <RoomPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/problems"
+        element={
+          <ProtectedRoute>
+            <ProblemList />
           </ProtectedRoute>
         }
       />
