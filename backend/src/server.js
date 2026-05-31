@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.route.js";
 import { app, server } from "./socket/socket.js";
 import codeRoutes from "./routes/code.route.js";
 import roomRoutes from "./routes/room.route.js";
+import problemRoutes from "./routes/problem.route.js"
 
 const PORT = ENV.PORT || 3000;
 
@@ -27,6 +28,7 @@ app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/rooms", roomRoutes);
 app.use("/api/code", codeRoutes);
+app.use("/api/problems", problemRoutes);
 
 connectDB()
   .then(() => {
