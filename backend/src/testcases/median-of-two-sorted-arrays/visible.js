@@ -1,0 +1,10 @@
+export const visibleTests = [
+  {
+    input: { nums1: [1, 3], nums2: [2] },
+    expectedOutput: 2.0
+  },
+  {
+    input: { nums1: [1, 2], nums2: [3, 4] },
+    expectedOutput: 2.5
+  }
+];
