@@ -1,0 +1,14 @@
+export const visibleTests = [
+  {
+    input: { x: 121 },
+    expectedOutput: true
+  },
+  {
+    input: { x: -121 },
+    expectedOutput: false
+  },
+  {
+    input: { x: 10 },
+    expectedOutput: false
+  }
+];

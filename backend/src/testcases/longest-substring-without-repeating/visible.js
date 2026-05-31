@@ -1,0 +1,14 @@
+export const visibleTests = [
+  {
+    input: { s: "abcabcbb" },
+    expectedOutput: 3
+  },
+  {
+    input: { s: "bbbbb" },
+    expectedOutput: 1
+  },
+  {
+    input: { s: "pwwkew" },
+    expectedOutput: 3
+  }
+];
