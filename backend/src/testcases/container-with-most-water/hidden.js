@@ -8,5 +8,5 @@ export const hiddenTests = [
   { input: { height: [10, 10] }, expectedOutput: 10 },
   { input: { height: [2, 3, 10, 5, 7, 8, 9] }, expectedOutput: 36 },
   { input: { height: [1, 3, 2, 5, 25, 24, 5] }, expectedOutput: 24 },
-  { input: { height: [5, 5, 5, 5, 5] }, expectedOutput: 20 }
+  { input: { height: [5, 5, 5, 5, 5] }, expectedOutput: 20 },
 ];
