@@ -1,4 +1,4 @@
-const problems = [
+export const problems = [
   // ─── EASY ───────────────────────────────────────────────────────────────────
 
   {
@@ -556,4 +556,3 @@ int largestRectangleArea(vector<int>& heights) {
   },
 ];
 
-export default questions;
