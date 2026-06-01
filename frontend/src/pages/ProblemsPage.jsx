@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Search } from 'lucide-react'
 import { useProblemStore } from '../store/problemStore'
 import ProblemCard from '../components/problems/ProblemCard.jsx'
+import Navbar from '../components/common/Navbar.jsx'
 
 const DIFFICULTIES = ['All', 'Easy', 'Medium', 'Hard']
 
@@ -69,8 +70,7 @@ const ProblemList = () => {
       <div>
         <div className='hidden md:grid grid-cols-[1fr_130px_220px] px-4 py-2 text-xs font-medium text-zinc-600 uppercase tracking-wider'>
           <span>Problem</span>
-          <span>Difficulty</span>
-          <span>Topics</span>
+          <span className='px-70'>Difficulty</span>
         </div>
 
         <div className='flex flex-col gap-1.5 mt-1'>

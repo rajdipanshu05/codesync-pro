@@ -1,9 +1,11 @@
-// ProblemPage.jsx
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Editor, { loader } from '@monaco-editor/react'
 import { ChevronLeft, CheckCircle2, Circle } from 'lucide-react'
 import { useProblemStore } from '../store/problemStore'
+import RunResults from '../components/problems/RunResults'
+import SubmitResults from '../components/problems/SubmitResults'
+import Confetti from 'react-confetti-boom'
 
 const LANGUAGES = ['python', 'java', 'cpp']
 
@@ -18,45 +20,149 @@ const THEMES = [
   { label: 'Light', value: 'vs' },
   { label: 'Dracula', value: 'dracula' },
   { label: 'Monokai', value: 'monokai' },
-  { label: 'Night Owl', value: 'night-owl' },
+  { label: 'Night Owl', value: 'night-owl' }
 ]
 
-// Load custom themes once
 loader.init().then(monaco => {
   fetch('https://cdn.jsdelivr.net/npm/monaco-themes@0.4.4/themes/Dracula.json')
-    .then(r => r.json()).then(data => monaco.editor.defineTheme('dracula', data))
-
+    .then(r => r.json())
+    .then(data => monaco.editor.defineTheme('dracula', data))
   fetch('https://cdn.jsdelivr.net/npm/monaco-themes@0.4.4/themes/Monokai.json')
-    .then(r => r.json()).then(data => monaco.editor.defineTheme('monokai', data))
-
-  fetch('https://cdn.jsdelivr.net/npm/monaco-themes@0.4.4/themes/Night%20Owl.json')
-    .then(r => r.json()).then(data => monaco.editor.defineTheme('night-owl', data))
+    .then(r => r.json())
+    .then(data => monaco.editor.defineTheme('monokai', data))
+  fetch(
+    'https://cdn.jsdelivr.net/npm/monaco-themes@0.4.4/themes/Night%20Owl.json'
+  )
+    .then(r => r.json())
+    .then(data => monaco.editor.defineTheme('night-owl', data))
 })
 
 const monacoLang = { python: 'python', java: 'java', cpp: 'cpp' }
 
+const storageKey = (problemId, language) => `code_${problemId}_${language}`
+const loadCode = (problemId, language) => {
+  try {
+    return localStorage.getItem(storageKey(problemId, language)) ?? null
+  } catch {
+    return null
+  }
+}
+const saveCode = (problemId, language, code) => {
+  try {
+    localStorage.setItem(storageKey(problemId, language), code)
+  } catch {}
+}
+const clearCode = (problemId, language) => {
+  try {
+    localStorage.removeItem(storageKey(problemId, language))
+  } catch {}
+}
+
+// ─── ProblemPage ─────────────────────────────────────────────────────────────
+
 const ProblemPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { currentProblem, getProblemById, isLoading } = useProblemStore()
+  const { currentProblem, runCode, submitCode, getProblemById, isLoading } =
+    useProblemStore()
 
   const [lang, setLang] = useState('python')
   const [code, setCode] = useState('')
   const [theme, setTheme] = useState('vs-dark')
+
+  const [runResult, setRunResult] = useState(null)
+  const [submitResult, setSubmitResult] = useState(null)
+  const [runLoading, setRunLoading] = useState(false)
+  const [submitLoading, setSubmitLoading] = useState(false)
+  const [activePanel, setActivePanel] = useState('run') // hamesha 'run' se start
+  const [panelOpen, setPanelOpen] = useState(true) // toggle ke liye
+  const [confetti, SetConfetti] = useState(false)
+
+  const codeRef = useRef(code)
+  const langRef = useRef(lang)
 
   useEffect(() => {
     getProblemById(id)
   }, [id])
 
   useEffect(() => {
-    if (currentProblem) {
-      setCode(currentProblem.starterCode[lang])
-    }
-  }, [currentProblem, lang])
+    if (!currentProblem) return
+    const saved = loadCode(id, lang)
+    setCode(saved !== null ? saved : currentProblem.starterCode[lang])
+  }, [currentProblem, id])
+
+  useEffect(() => {
+    codeRef.current = code
+  }, [code])
+  useEffect(() => {
+    langRef.current = lang
+  }, [lang])
+
+  useEffect(() => {
+    if (!id) return
+    const timer = setTimeout(
+      () => saveCode(id, langRef.current, codeRef.current),
+      500
+    )
+    return () => clearTimeout(timer)
+  }, [code, id])
 
   const handleLangChange = l => {
+    saveCode(id, lang, code)
     setLang(l)
-    setCode(currentProblem.starterCode[l])
+    if (currentProblem) {
+      const saved = loadCode(id, l)
+      setCode(saved !== null ? saved : currentProblem.starterCode[l])
+    }
+  }
+
+  const handleResetCode = () => {
+    if (!currentProblem) return
+    clearCode(id, lang)
+    setCode(currentProblem.starterCode[lang])
+  }
+
+  const handleRunButton = async () => {
+    setActivePanel('run')
+    setPanelOpen(true)
+    setRunResult(null)
+    setRunLoading(true)
+    try {
+      const data = await runCode({ language: lang, code, problemId: id })
+   
+
+      setRunResult(data)
+    } catch (e) {
+      setRunResult({ error: e?.message || 'Something went wrong' })
+    } finally {
+      setRunLoading(false)
+    }
+  }
+
+  const handleSubmitButton = async () => {
+    setActivePanel('submit')
+    setPanelOpen(true)
+    setSubmitResult(null)
+    setSubmitLoading(true)
+    try {
+      const data = await submitCode({ language: lang, code, problemId: id })
+      if (data.allPassed) {
+        SetConfetti(false)
+
+        setTimeout(() => {
+          SetConfetti(true)
+        }, 50)
+
+        setTimeout(() => {
+          SetConfetti(false)
+        }, 5000)
+      }
+      setSubmitResult(data)
+    } catch (e) {
+      setSubmitResult({ error: e?.message || 'Something went wrong' })
+    } finally {
+      setSubmitLoading(false)
+    }
   }
 
   if (isLoading || !currentProblem) {
@@ -78,7 +184,12 @@ const ProblemPage = () => {
   } = currentProblem
 
   return (
-    <div className='min-h-screen bg-zinc-950 text-white flex flex-col'>
+    <div className='h-screen bg-zinc-950 text-white flex flex-col overflow-hidden'>
+      {confetti && (
+        <div className='fixed inset-0 z-[9999] pointer-events-none'>
+          <Confetti />
+        </div>
+      )}
       {/* TOPBAR */}
       <header className='flex items-center justify-between px-5 py-3 border-b border-zinc-800 bg-zinc-950'>
         <button
@@ -88,7 +199,6 @@ const ProblemPage = () => {
           <ChevronLeft size={16} />
           Problems
         </button>
-
         <div className='flex items-center gap-3'>
           <span
             className={`text-xs font-medium ${difficultyColors[difficulty]}`}
@@ -110,14 +220,11 @@ const ProblemPage = () => {
 
       {/* MAIN SPLIT */}
       <div className='flex flex-1 overflow-hidden'>
-        {/* LEFT — Problem */}
+        {/* LEFT */}
         <div className='w-[42%] border-r border-zinc-800 overflow-y-auto p-6 space-y-6'>
           <h1 className='text-xl font-semibold text-white'>{title}</h1>
-
-          {/* STATEMENT */}
           <p className='text-sm text-zinc-400 leading-relaxed'>{statement}</p>
 
-          {/* EXAMPLES */}
           <div className='space-y-3'>
             {examples.map((ex, i) => (
               <div
@@ -147,7 +254,6 @@ const ProblemPage = () => {
             ))}
           </div>
 
-          {/* CONSTRAINTS */}
           <div>
             <p className='text-xs font-medium text-zinc-500 mb-2 uppercase tracking-wider'>
               Constraints
@@ -166,8 +272,8 @@ const ProblemPage = () => {
           </div>
         </div>
 
-        {/* RIGHT — Editor */}
-        <div className='flex-1 flex flex-col'>
+        {/* RIGHT */}
+        <div className='flex-1 flex flex-col overflow-hidden'>
           {/* LANG TABS + THEME */}
           <div className='flex items-center justify-between border-b border-zinc-800 bg-zinc-900 px-4 py-2'>
             <div className='flex items-center gap-1'>
@@ -176,17 +282,16 @@ const ProblemPage = () => {
                   key={l}
                   onClick={() => handleLangChange(l)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all capitalize
-          ${
-            lang === l
-              ? 'bg-zinc-700 text-white'
-              : 'text-zinc-500 hover:text-zinc-300'
-          }`}
+                    ${
+                      lang === l
+                        ? 'bg-zinc-700 text-white'
+                        : 'text-zinc-500 hover:text-zinc-300'
+                    }`}
                 >
                   {l}
                 </button>
               ))}
             </div>
-
             <select
               value={theme}
               onChange={e => setTheme(e.target.value)}
@@ -201,7 +306,7 @@ const ProblemPage = () => {
           </div>
 
           {/* MONACO */}
-          <div className='flex-1'>
+          <div className='flex-1 overflow-hidden'>
             <Editor
               height='100%'
               language={monacoLang[lang]}
@@ -222,20 +327,46 @@ const ProblemPage = () => {
             />
           </div>
 
-          {/* SUBMIT BAR */}
+          {/* RESULTS — hamesha render hota hai */}
+          {activePanel === 'run' ? (
+            <RunResults
+              results={runResult}
+              isLoading={runLoading}
+              examples={examples}
+              isOpen={panelOpen}
+              onToggle={() => setPanelOpen(v => !v)}
+            />
+          ) : (
+            <SubmitResults
+              results={submitResult}
+              isLoading={submitLoading}
+              isOpen={panelOpen}
+              onToggle={() => setPanelOpen(v => !v)}
+            />
+          )}
+
+          {/* BOTTOM BAR */}
           <div className='flex items-center justify-between px-4 py-3 border-t border-zinc-800 bg-zinc-900'>
             <button
-              onClick={() => setCode(starterCode[lang])}
+              onClick={handleResetCode}
               className='text-xs text-zinc-500 hover:text-zinc-300 transition-colors'
             >
               Reset code
             </button>
             <div className='flex items-center gap-2'>
-              <button className='flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black text-sm font-semibold px-5 py-2 rounded-xl transition-colors'>
+              <button
+                onClick={handleRunButton}
+                disabled={runLoading || submitLoading}
+                className='flex items-center gap-2 bg-zinc-700 hover:bg-zinc-600 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors'
+              >
                 <CheckCircle2 size={15} />
                 Run
               </button>
-              <button className='flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black text-sm font-semibold px-5 py-2 rounded-xl transition-colors'>
+              <button
+                onClick={handleSubmitButton}
+                disabled={runLoading || submitLoading}
+                className='flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-black text-sm font-semibold px-5 py-2 rounded-xl transition-colors'
+              >
                 <CheckCircle2 size={15} />
                 Submit
               </button>
