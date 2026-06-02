@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import Editor, { loader } from '@monaco-editor/react'
-import { ChevronLeft, CheckCircle2, Circle } from 'lucide-react'
 import { useProblemStore } from '../store/problemStore'
 import RunResults from '../components/problems/RunResults'
 import SubmitResults from '../components/problems/SubmitResults'
 import Confetti from 'react-confetti-boom'
+import { ChevronLeft, CheckCircle2, RotateCcw } from 'lucide-react'
 
 const LANGUAGES = ['python', 'java', 'cpp']
 
@@ -118,8 +118,11 @@ const ProblemPage = () => {
 
   const handleResetCode = () => {
     if (!currentProblem) return
-    clearCode(id, lang)
-    setCode(currentProblem.starterCode[lang])
+
+    const defaultCode = currentProblem.starterCode[lang]
+
+    setCode(defaultCode)
+    saveCode(id, lang, defaultCode)
   }
 
   const handleRunButton = async () => {
@@ -293,33 +296,52 @@ const ProblemPage = () => {
         >
           {/* LANG TABS + THEME */}
           <div className='flex items-center justify-between border-b border-zinc-800 bg-zinc-900 px-4 py-2'>
+            {/* Language Tabs */}
             <div className='flex items-center gap-1'>
               {LANGUAGES.map(l => (
                 <button
                   key={l}
                   onClick={() => handleLangChange(l)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all capitalize
-                    ${
-                      lang === l
-                        ? 'bg-zinc-700 text-white'
-                        : 'text-zinc-500 hover:text-zinc-300'
-                    }`}
+          ${
+            lang === l
+              ? 'bg-zinc-700 text-white'
+              : 'text-zinc-500 hover:text-zinc-300'
+          }`}
                 >
                   {l}
                 </button>
               ))}
             </div>
-            <select
-              value={theme}
-              onChange={e => setTheme(e.target.value)}
-              className='bg-zinc-800 border border-zinc-700 text-zinc-300 text-xs rounded-lg px-3 py-1.5 outline-none cursor-pointer'
-            >
-              {THEMES.map(t => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
+
+            {/* Actions */}
+            <div className='flex items-center gap-2'>
+              <button
+                onClick={handleResetCode}
+                title='Reset to Default Code'
+                className='flex items-center gap-1.5 px-3 py-1.5 rounded-lg
+                 bg-zinc-800 border border-zinc-700
+                 text-zinc-400 hover:text-white
+                 hover:bg-zinc-700 transition-all'
+              >
+                <RotateCcw size={14} />
+                <span className='hidden sm:inline text-xs'>Reset</span>
+              </button>
+
+              <select
+                value={theme}
+                onChange={e => setTheme(e.target.value)}
+                className='bg-zinc-800 border border-zinc-700 text-zinc-300
+                 text-xs rounded-lg px-3 py-1.5 outline-none
+                 cursor-pointer hover:border-zinc-600'
+              >
+                {THEMES.map(t => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* MONACO */}

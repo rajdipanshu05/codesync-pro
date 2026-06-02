@@ -1,28 +1,28 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route } from 'react-router-dom'
 
-import LoginPage from "../pages/LoginPage";
+import LoginPage from '../pages/LoginPage'
 
-import SignupPage from "../pages/SignupPage";
+import SignupPage from '../pages/SignupPage'
 
-import HomePage from "../pages/HomePage";
+import HomePage from '../pages/HomePage'
 
-import RoomPage from "../pages/RoomPage";
+import RoomPage from '../pages/RoomPage'
 
-import ProtectedRoute from "../components/common/ProtectedRoute";
-import ProblemDetailsPage from "../pages/ProblemDetails";
-import ProblemPage from "../pages/ProblemsPage";
+import ProtectedRoute from '../components/common/ProtectedRoute'
+import ProblemDetailsPage from '../pages/ProblemDetails'
+import ProblemPage from '../pages/ProblemsPage'
 
 const AppRoutes = () => {
   return (
     <Routes>
       {/* PUBLIC */}
-      <Route path="/login" element={<LoginPage />} />
+      <Route path='/login' element={<LoginPage />} />
 
-      <Route path="/signup" element={<SignupPage />} />
+      <Route path='/signup' element={<SignupPage />} />
 
       {/* PROTECTED */}
       <Route
-        path="/"
+        path='/'
         element={
           <ProtectedRoute>
             <HomePage />
@@ -31,7 +31,7 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="/room/:roomId"
+        path='/room/:roomId'
         element={
           <ProtectedRoute>
             <RoomPage />
@@ -39,16 +39,23 @@ const AppRoutes = () => {
         }
       />
       <Route
-        path="/problems"
+        path='/problems'
         element={
           <ProtectedRoute>
             <ProblemPage />
           </ProtectedRoute>
         }
       />
-      <Route path='/problems/:id' element={<ProblemDetailsPage />} />
+      <Route
+        path='/problems/:id'
+        element={
+          <ProtectedRoute>
+            <ProblemDetailsPage />
+          </ProtectedRoute>
+        }
+      />
     </Routes>
-  );
-};
+  )
+}
 
-export default AppRoutes;
+export default AppRoutes

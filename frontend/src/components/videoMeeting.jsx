@@ -11,8 +11,8 @@ import MicIcon from '@mui/icons-material/Mic'
 import MicOffIcon from '@mui/icons-material/MicOff'
 import ScreenShareIcon from '@mui/icons-material/ScreenShare'
 import StopScreenShareIcon from '@mui/icons-material/StopScreenShare'
-// const socketUrl = 'https://codesync-backend-0xnc.onrender.com'
-const socketUrl = 'http://localhost:8000'
+const socketUrl = 'https://codesync-backend-0xnc.onrender.com'
+// const socketUrl = 'http://localhost:8000'
 
 // ✅ Fix - add free TURN servers + more STUN
 const peerConfigConnections = {
