@@ -6,6 +6,7 @@ import RunResults from '../components/problems/RunResults'
 import SubmitResults from '../components/problems/SubmitResults'
 import Confetti from 'react-confetti-boom'
 import { ChevronLeft, CheckCircle2, RotateCcw } from 'lucide-react'
+import ProblemDetailsSkeleton from '../components/problems/ProblemDetailsSkeleton'
 
 const LANGUAGES = ['python', 'java', 'cpp']
 
@@ -169,9 +170,7 @@ const ProblemPage = () => {
 
   if (isLoading || !currentProblem) {
     return (
-      <div className='flex items-center justify-center min-h-screen bg-zinc-950'>
-        <div className='w-6 h-6 border-2 border-zinc-600 border-t-white rounded-full animate-spin' />
-      </div>
+      <ProblemDetailsSkeleton/>
     )
   }
 

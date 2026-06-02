@@ -4,6 +4,7 @@ import { useProblemStore } from '../store/problemStore'
 import ProblemCard from '../components/problems/ProblemCard'
 import ProblemHeader from '../components/problems/ProblemHeader'
 import ProblemFilters from '../components/problems/ProblemFilters'
+import ProblemsSkeleton from '../components/problems/ProblemsSkeleton'
 
 const ProblemList = () => {
   const { problems, getProblems, isLoading } = useProblemStore()
@@ -31,9 +32,7 @@ const ProblemList = () => {
 
   if (isLoading) {
     return (
-      <div className='text-center text-zinc-500 py-20'>
-        Loading...
-      </div>
+      <ProblemsSkeleton/>
     )
   }
 
