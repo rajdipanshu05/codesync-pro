@@ -68,6 +68,7 @@ PORT=5000
 MONGO_URI=mongodb://localhost:27017/codesync-pro
 JWT_SECRET=your_jwt_secret_here
 JUDGE0_URL=https://ce.judge0.com
+MODE=development
 ```
 
 ```bash

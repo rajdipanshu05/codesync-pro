@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { ENV } from "../config/env";
 export const runCode = async (req, res) => {
 
   try {
@@ -24,8 +24,7 @@ export const runCode = async (req, res) => {
 
     const response =
       await axios.post(
-        "https://ce.judge0.com/submissions?base64_encoded=false&wait=true",
-
+        ENV.JUDGE0_URL,
         {
           language_id,
 

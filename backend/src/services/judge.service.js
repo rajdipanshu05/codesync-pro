@@ -2,7 +2,7 @@
 import axios from "axios";
 import { buildSourceCode, buildStdin } from "./wrapper.service.js";
 import { getVisibleTests, getHiddenTests } from "./testcase.service.js";
-
+import { ENV } from "../config/env.js";
 const languageMap = {
   java: 62,
   cpp: 54,
@@ -13,7 +13,7 @@ const languageMap = {
 
 const executeCode = async ({ language, sourceCode, stdin = "" }) => {
   const response = await axios.post(
-    "https://ce.judge0.com/submissions?base64_encoded=false&wait=true",
+    ENV.JUDGE0_URL,
     {
       language_id: languageMap[language],
       source_code: sourceCode,
