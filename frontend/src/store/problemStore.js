@@ -4,6 +4,9 @@ import { axiosInstance } from '../api/axios'
 export const useProblemStore = create(set => ({
   problems: [],
   isLoading: false,
+  isRunning:false,
+   currentProblem: null,
+  currentResult: null,
 
   getProblems: async () => {
     try {
@@ -14,7 +17,6 @@ export const useProblemStore = create(set => ({
         problems: response.data
       })
     } catch (error) {
-      console.log(error)
     } finally {
       set({ isLoading: false })
     }
@@ -23,8 +25,27 @@ export const useProblemStore = create(set => ({
   getProblemById: async id => {
     set({ isLoading: true })
     const res = await axiosInstance.get(`/problems/${id}`)
-    const data = await res.data;
-    console.log(data)
+    const data = res.data
     set({ currentProblem: data, isLoading: false })
+  },
+
+  runCode: async data => {
+    set({ isRunning: true })
+    const res = await axiosInstance.post(`/problems/run`, data)
+    // console.log(res.data);
+    const result=res?.data
+    set({currentResult:result, isRunning: false })
+
+    return result;
+  },
+  submitCode: async data => {
+    set({ isRunning: true })
+    const res = await axiosInstance.post(`/problems/submit`, data)
+    // console.log(res.data);
+    const result=res?.data
+    set({currentResult:result, isRunning: false })
+    
+    return result;
   }
+
 }))
