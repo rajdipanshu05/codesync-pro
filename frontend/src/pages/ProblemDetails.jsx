@@ -129,7 +129,6 @@ const ProblemPage = () => {
     setRunLoading(true)
     try {
       const data = await runCode({ language: lang, code, problemId: id })
-   
 
       setRunResult(data)
     } catch (e) {
@@ -184,7 +183,7 @@ const ProblemPage = () => {
   } = currentProblem
 
   return (
-    <div className='h-screen bg-zinc-950 text-white flex flex-col overflow-hidden'>
+    <div className='min-h-dvh bg-zinc-950 text-white flex flex-col'>
       {confetti && (
         <div className='fixed inset-0 z-[9999] pointer-events-none'>
           <Confetti />
@@ -199,7 +198,7 @@ const ProblemPage = () => {
           <ChevronLeft size={16} />
           Problems
         </button>
-        <div className='flex items-center gap-3'>
+        <div className='flex w-full sm:w-auto gap-2'>
           <span
             className={`text-xs font-medium ${difficultyColors[difficulty]}`}
           >
@@ -219,9 +218,18 @@ const ProblemPage = () => {
       </header>
 
       {/* MAIN SPLIT */}
-      <div className='flex flex-1 overflow-hidden'>
+      <div className='flex flex-col lg:flex-row flex-1'>
         {/* LEFT */}
-        <div className='w-[42%] border-r border-zinc-800 overflow-y-auto p-6 space-y-6'>
+        <div
+          className='
+  w-full
+  lg:w-[42%]
+  border-b lg:border-b-0 lg:border-r
+  border-zinc-800
+  p-4 lg:p-6
+  space-y-6
+  '
+        >
           <h1 className='text-xl font-semibold text-white'>{title}</h1>
           <p className='text-sm text-zinc-400 leading-relaxed'>{statement}</p>
 
@@ -273,7 +281,16 @@ const ProblemPage = () => {
         </div>
 
         {/* RIGHT */}
-        <div className='flex-1 flex flex-col overflow-hidden'>
+        <div
+          className='
+  w-full
+  lg:flex-1
+  flex
+  flex-col
+  min-h-[500px]
+  lg:min-h-0
+  '
+        >
           {/* LANG TABS + THEME */}
           <div className='flex items-center justify-between border-b border-zinc-800 bg-zinc-900 px-4 py-2'>
             <div className='flex items-center gap-1'>
@@ -306,7 +323,7 @@ const ProblemPage = () => {
           </div>
 
           {/* MONACO */}
-          <div className='flex-1 overflow-hidden'>
+          <div className='h-[450px] lg:flex-1'>
             <Editor
               height='100%'
               language={monacoLang[lang]}
@@ -357,7 +374,7 @@ const ProblemPage = () => {
               <button
                 onClick={handleRunButton}
                 disabled={runLoading || submitLoading}
-                className='flex items-center gap-2 bg-zinc-700 hover:bg-zinc-600 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors'
+                className='flex-1 sm:flex-none flex items-center justify-center gap-2 bg-zinc-700 hover:bg-zinc-600 disabled:opacity-50 text-white text-sm font-semibold px-5 py-2 rounded-xl transition-colors'
               >
                 <CheckCircle2 size={15} />
                 Run
@@ -365,7 +382,7 @@ const ProblemPage = () => {
               <button
                 onClick={handleSubmitButton}
                 disabled={runLoading || submitLoading}
-                className='flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-black text-sm font-semibold px-5 py-2 rounded-xl transition-colors'
+                className='flex-1 sm:flex-none flex items-center justify-center gap-2 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-black text-sm font-semibold px-5 py-2 rounded-xl transition-colors'
               >
                 <CheckCircle2 size={15} />
                 Submit
