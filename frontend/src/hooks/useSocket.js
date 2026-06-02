@@ -7,7 +7,7 @@ const useSocket = () => {
     if (!socket.connected) {
       socket.connect();
     }
-
+    
     socket.on("connect", () => {
       console.log("SOCKET CONNECTED:", socket.id);
     });

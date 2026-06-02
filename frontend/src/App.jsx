@@ -2,6 +2,8 @@ import AppRoutes from "./routes/AppRoutes";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import { useAuthStore } from "./store/authStore";
+import Navbar from "./components/common/Navbar";
+
 
 const App = () => {
   const { checkAuth } = useAuthStore();
@@ -13,7 +15,6 @@ const App = () => {
   return (
     <>
       <Toaster position="top-center" height="10%" reverseOrder={false} />
-
       <AppRoutes />
     </>
   );

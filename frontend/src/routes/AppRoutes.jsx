@@ -9,6 +9,8 @@ import HomePage from "../pages/HomePage";
 import RoomPage from "../pages/RoomPage";
 
 import ProtectedRoute from "../components/common/ProtectedRoute";
+import ProblemDetailsPage from "../pages/ProblemDetails";
+import ProblemPage from "../pages/ProblemsPage";
 
 const AppRoutes = () => {
   return (
@@ -36,6 +38,15 @@ const AppRoutes = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/problems"
+        element={
+          <ProtectedRoute>
+            <ProblemPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route path='/problems/:id' element={<ProblemDetailsPage />} />
     </Routes>
   );
 };
