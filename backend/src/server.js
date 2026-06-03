@@ -12,8 +12,6 @@ import problemRoutes from "./routes/problem.route.js"
 
 const PORT = ENV.PORT || 3000;
 
-app.use(express.json({ limit: "5mb" })); //req.body
-const clientUrl = (ENV.MODE === "development") ? "http://localhost:5173" : "https://codesync-un48.onrender.com";
 app.use(
   cors({
     origin: clientUrl,
@@ -21,6 +19,8 @@ app.use(
     methods: ["GET", "POST", "PUT", "DELETE"],
   }),
 );
+app.use(express.json({ limit: "5mb" })); //req.body
+const clientUrl = (ENV.MODE === "development") ? "http://localhost:5173" : "https://codesync-un48.onrender.com";
 app.use(cookieParser());
 
 
