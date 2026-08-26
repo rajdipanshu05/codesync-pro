@@ -1,6 +1,6 @@
 <div align="center">
 
-# ⚡ CodeSync Pro
+#  CodeSync Pro
 
 **A real-time collaborative coding platform with live chat, video meetings, and a built-in code judge.**
 
@@ -15,20 +15,20 @@
 
 ---
 
-## ✨ Features
+##  Features
 
-- 🔴 **Real-time Collaborative Editor** — Write code together with your team, changes sync instantly via WebSockets
-- 🧑‍⚖️ **Built-in Code Judge** — Run and submit solutions against test cases (JavaScript, Python, Java, C++) powered by Judge0
-- 💬 **Live Room Chat** — Real-time per-room chat synced across all participants
-- 📹 **Video Meetings** — Peer-to-peer video calling via WebRTC so your team can pair program face-to-face
-- 🎨 **Theme & Language Selector** — Multiple editor themes and on-the-fly language switching
-- 🔐 **Auth System** — JWT-based login/signup with protected routes
-- 🏆 **Coding Problems** — Curated problems (Easy → Hard) with visible and hidden test cases
-- 👥 **Active Users Panel** — See who's live in the room in real time
+-  **Real-time Collaborative Editor** — Write code together with your team, changes sync instantly via WebSockets
+-  **Built-in Code Judge** — Run and submit solutions against test cases (JavaScript, Python, Java, C++) powered by Judge0
+-  **Live Room Chat** — Real-time per-room chat synced across all participants
+-  **Video Meetings** — Peer-to-peer video calling via WebRTC so your team can pair program face-to-face
+-  **Theme & Language Selector** — Multiple editor themes and on-the-fly language switching
+-  **Auth System** — JWT-based login/signup with protected routes
+-  **Coding Problems** — Curated problems (Easy → Hard) with visible and hidden test cases
+-  **Active Users Panel** — See who's live in the room in real time
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 | Layer | Tech |
 |---|---|
@@ -43,7 +43,7 @@
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js >= 18
@@ -86,7 +86,7 @@ App runs at `http://localhost:5173`
 
 ---
 
-## 🤝 Contributing
+##  Contributing
 
 Pull requests are welcome! Please open an issue first for major changes.
 
@@ -102,6 +102,6 @@ Pull requests are welcome! Please open an issue first for major changes.
 
 Made with ❤️ by [rajdipanshu05](https://github.com/rajdipanshu05) and [Ayushhgi](https://github.com/Ayushhgi)
 
-⭐ **Star this repo if you found it helpful!**
+ **Star this repo if you found it helpful!**
 
 </div>
